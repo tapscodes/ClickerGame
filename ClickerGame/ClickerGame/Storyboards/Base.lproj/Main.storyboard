@@ -16,63 +16,20 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <skView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="I90-Nt-7m7">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                             </skView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FbQ-nm-WvN">
-                                <rect key="frame" x="157" y="812" width="100" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="DhE-Ti-tYG"/>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="hdg-bA-6xt"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="black" pointSize="30"/>
-                                <state key="normal" title="Shop">
-                                    <color key="titleColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                </state>
-                                <connections>
-                                    <action selector="shopPressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="30q-Zz-R6a"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vbB-jl-NVe">
-                                <rect key="frame" x="257" y="812" width="157" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="2gb-rD-LEL"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="black" pointSize="30"/>
-                                <state key="normal" title="Share">
-                                    <color key="titleColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                </state>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OwB-rW-tOa">
-                                <rect key="frame" x="0.0" y="812" width="157" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="XCj-ar-9do"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" weight="black" pointSize="30"/>
-                                <state key="normal" title="IDK">
-                                    <color key="titleColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                </state>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="4qk-I5-YsI" firstAttribute="bottom" secondItem="FbQ-nm-WvN" secondAttribute="bottom" id="64g-Wc-lEL"/>
-                            <constraint firstItem="OwB-rW-tOa" firstAttribute="bottom" secondItem="4qk-I5-YsI" secondAttribute="bottom" id="Ayg-th-EJe"/>
-                            <constraint firstItem="FbQ-nm-WvN" firstAttribute="centerX" secondItem="3se-qz-xqx" secondAttribute="centerX" id="BR9-e5-PgR"/>
-                            <constraint firstItem="I90-Nt-7m7" firstAttribute="top" secondItem="4qk-I5-YsI" secondAttribute="top" id="HfA-Y1-TIT"/>
-                            <constraint firstItem="4qk-I5-YsI" firstAttribute="trailing" secondItem="vbB-jl-NVe" secondAttribute="trailing" id="IOD-IK-SEQ"/>
-                            <constraint firstItem="vbB-jl-NVe" firstAttribute="leading" secondItem="FbQ-nm-WvN" secondAttribute="trailing" id="K9K-so-zRt"/>
+                            <constraint firstItem="I90-Nt-7m7" firstAttribute="top" secondItem="3se-qz-xqx" secondAttribute="top" id="HfA-Y1-TIT"/>
                             <constraint firstItem="4qk-I5-YsI" firstAttribute="trailing" secondItem="I90-Nt-7m7" secondAttribute="trailing" id="der-Zm-WVU"/>
-                            <constraint firstItem="FbQ-nm-WvN" firstAttribute="leading" secondItem="OwB-rW-tOa" secondAttribute="trailing" id="eAD-wb-XJC"/>
-                            <constraint firstItem="vbB-jl-NVe" firstAttribute="bottom" secondItem="4qk-I5-YsI" secondAttribute="bottom" id="giw-ET-nvB"/>
-                            <constraint firstItem="OwB-rW-tOa" firstAttribute="leading" secondItem="4qk-I5-YsI" secondAttribute="leading" id="hYF-gC-w6J"/>
                             <constraint firstItem="I90-Nt-7m7" firstAttribute="leading" secondItem="4qk-I5-YsI" secondAttribute="leading" id="r94-Sj-Hsc"/>
-                            <constraint firstItem="4qk-I5-YsI" firstAttribute="bottom" secondItem="I90-Nt-7m7" secondAttribute="bottom" id="z7K-R5-jfz"/>
+                            <constraint firstAttribute="bottom" secondItem="I90-Nt-7m7" secondAttribute="bottom" id="z7K-R5-jfz"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="4qk-I5-YsI"/>
                     </view>
                     <connections>
                         <outlet property="gameView" destination="I90-Nt-7m7" id="QgC-aQ-Wvu"/>
-                        <outlet property="shopBtn" destination="FbQ-nm-WvN" id="8gE-Yb-78e"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>

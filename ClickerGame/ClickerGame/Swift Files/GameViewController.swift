@@ -13,7 +13,6 @@ var gameVC = GameViewController()
 class GameViewController: UIViewController {
     //MARK - Outlets
     @IBOutlet weak var gameView: SKView!
-    @IBOutlet weak var shopBtn: UIButton!
     //MARK - Variables
     var musicPlayer : AVAudioPlayer = AVAudioPlayer()
     //MARK - Functions
@@ -28,13 +27,16 @@ class GameViewController: UIViewController {
             print("NO SESSION")
         }
         //playSong(song: "No Song")
-        if let view = self.gameView {
+        if let SKview = self.gameView {
             // Load the SKScene from 'MainScene.sks'
             if let scene = SKScene(fileNamed: "GameScene") {
                 // Set the scale mode to scale to fit the window
+                //helps spritekit render
+                SKview.ignoresSiblingOrder = true
+                //resizes based on device
                 scene.scaleMode = .aspectFill
                 // Present the scene
-                view.presentScene(scene)
+                SKview.presentScene(scene)
             }
         }
     }
@@ -59,10 +61,6 @@ class GameViewController: UIViewController {
         }
         alertMessage.addAction(okayAction)
         gameVC.present(alertMessage, animated: true)
-    }
-    //shop button pressed
-    @IBAction func shopPressed(_ sender: Any) {
-        
     }
     //MARK - Default Functions
     override var shouldAutorotate: Bool {
