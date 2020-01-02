@@ -62,6 +62,10 @@ class GameScene: SKScene {
         let yPos: CGFloat = CGFloat.random(in: -scrHeight + 40 + safeArea.bottom...scrHeight - 40 - safeArea.top)
         clickSprite.position = CGPoint(x: xPos, y: yPos)
     }
+    //sets up shop
+    func setShop(){
+        print("bruh")
+    }
     //Detects Tap (Beggining) TO ADD: check if touching "click Sprite"
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first!
@@ -74,24 +78,6 @@ class GameScene: SKScene {
                 fastestTime = time
             }
             time = 0
-            //ONLY FOR TESTING PURPOSES (REMOVE AFTER)
-            /*
-            if(testData.count == 10){ //attempts to share String of first 20 test results
-                var resultString: String = ""
-                for n in 0...testData.count - 1{
-                    let data: String = String(format: "%.3f", testData[n]) //formats data
-                    resultString = "\(resultString) \n\(data)"
-                }
-                let textToShare = [ resultString ] //converts image to "Any"
-                //sets up VC so it works for all devices
-                let activityViewController = UIActivityViewController(activityItems: textToShare, applicationActivities: nil)
-                activityViewController.popoverPresentationController?.sourceView = self.view
-                // present the view controller
-                gameVC.present(activityViewController, animated: true, completion: nil)
-                testData = []
-            }
-            */
-            //REMOVE TESTING STOPS HERE
             pointsLbl.text = "Points: \(points)"
         }
         else if (!shopping && shopButton.contains(touch.location(in: self))){ //if shopping
@@ -99,6 +85,7 @@ class GameScene: SKScene {
             shopButton.isHidden = true
             closeShop.isHidden = false
             shopping = true
+            setShop()
         }
         else if (shopping && closeShop.contains(touch.location(in: self))){ //if stopping shopping
             print("stopping")
