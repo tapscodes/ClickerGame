@@ -44,11 +44,11 @@ class GameScene: SKScene {
         clickSprite.zPosition = 1
         shopButton = self.childNode(withName: "shopButton") as! SKSpriteNode
         shopButton.isUserInteractionEnabled = false
-        shopButton.size = CGSize(width: 100, height: 50)
+        shopButton.size = CGSize(width: 200, height: 100)
         shopButton.color = UIColor(ciColor: .blue)
-        shopButton.position = CGPoint(x: 0, y: -scrHeight + safeArea.bottom + 25)
+        shopButton.position = CGPoint(x: 0, y: -scrHeight + safeArea.bottom + 50)
         closeShop = self.childNode(withName: "closeShop") as! SKSpriteNode
-        closeShop.size = CGSize(width: 100, height: 50)
+        closeShop.size = CGSize(width: 200, height: 100)
         closeShop.isUserInteractionEnabled = false
         closeShop.isHidden = true
         closeShop.color = UIColor(ciColor: .green)
@@ -59,7 +59,7 @@ class GameScene: SKScene {
     func setPos(){
         print("Screen Size: \(UIScreen.main.bounds.width) , \(UIScreen.main.bounds.height) \n Scene Size: \(scrWidth) , \(scrHeight)")
         let xPos: CGFloat = CGFloat.random(in: -scrWidth + 35...scrWidth - 35)
-        let yPos: CGFloat = CGFloat.random(in: -scrHeight + 35...scrHeight - 35)
+        let yPos: CGFloat = CGFloat.random(in: -scrHeight + 35 + safeArea.bottom...scrHeight - 35 - safeArea.top)
         clickSprite.position = CGPoint(x: xPos, y: yPos)
     }
     //Detects Tap (Beggining) TO ADD: check if touching "click Sprite"
