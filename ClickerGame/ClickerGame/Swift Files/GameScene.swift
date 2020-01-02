@@ -40,7 +40,7 @@ class GameScene: SKScene {
         pointsLbl.text = "Points: \(points)"
         clickSprite = self.childNode(withName: "clickSprite") as! SKSpriteNode
         clickSprite.isUserInteractionEnabled = false
-        clickSprite.size = CGSize(width: 70, height: 70)
+        clickSprite.size = CGSize(width: 100, height: 100)
         clickSprite.zPosition = 1
         shopButton = self.childNode(withName: "shopButton") as! SKSpriteNode
         shopButton.isUserInteractionEnabled = false
@@ -58,8 +58,8 @@ class GameScene: SKScene {
     //sets sprite position to random spot on screen
     func setPos(){
         print("Screen Size: \(UIScreen.main.bounds.width) , \(UIScreen.main.bounds.height) \n Scene Size: \(scrWidth) , \(scrHeight)")
-        let xPos: CGFloat = CGFloat.random(in: -scrWidth + 35...scrWidth - 35)
-        let yPos: CGFloat = CGFloat.random(in: -scrHeight + 35 + safeArea.bottom...scrHeight - 35 - safeArea.top)
+        let xPos: CGFloat = CGFloat.random(in: -scrWidth + 40...scrWidth - 40)
+        let yPos: CGFloat = CGFloat.random(in: -scrHeight + 40 + safeArea.bottom...scrHeight - 40 - safeArea.top)
         clickSprite.position = CGPoint(x: xPos, y: yPos)
     }
     //Detects Tap (Beggining) TO ADD: check if touching "click Sprite"
