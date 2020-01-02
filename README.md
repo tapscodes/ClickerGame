@@ -4,13 +4,12 @@ A game idea that I came up with where a user gets points for clicking an object 
 - Highscores
 - Actual Sprite (Debatable)
 - Music
-- Functionality to buttons on bottom
+- Shop Things
 - CoreData to save highscores+points on device
 - GameCenter support?
 - Combos (Possibly several types)
-- Things in shop
 - App Icon
 ## Current Bugs
-- Sprite sometimes spawns off screen
+- None
 ## Official Release Date
 Whenever its finished and hopefully on the appstore.
