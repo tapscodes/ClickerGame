@@ -20,6 +20,7 @@ var shopping = false
 class GameScene: SKScene {
     //MARK - Variables
     var pointsLbl = SKLabelNode()
+    var shopLbl = SKLabelNode()
     var clickSprite = SKSpriteNode()
     var shopButton = SKSpriteNode()
     var closeShop = SKSpriteNode()
@@ -42,19 +43,19 @@ class GameScene: SKScene {
         pointsLbl = self.childNode(withName: "pointsLbl") as! SKLabelNode
         pointsLbl.position = CGPoint(x: 0, y: scrHeight - safeArea.top - pointsLbl.frame.height)
         pointsLbl.text = "Points: \(points)"
-        pointsLbl.zPosition = 8
+        pointsLbl.zPosition = 2
         //sprite to be clicked
         clickSprite = self.childNode(withName: "clickSprite") as! SKSpriteNode
         clickSprite.isUserInteractionEnabled = false
         clickSprite.size = CGSize(width: 100, height: 100)
-        clickSprite.zPosition = 9
+        clickSprite.zPosition = 5
         //shop button
         shopButton = self.childNode(withName: "shopButton") as! SKSpriteNode
         shopButton.isUserInteractionEnabled = false
         shopButton.size = CGSize(width: 200, height: 100)
         shopButton.color = UIColor(ciColor: .blue)
         shopButton.position = CGPoint(x: 0, y: -scrHeight + safeArea.bottom + 50)
-        shopButton.zPosition = 7
+        shopButton.zPosition = 1
         //close shop button
         closeShop = self.childNode(withName: "closeShop") as! SKSpriteNode
         closeShop.size = CGSize(width: 200, height: 100)
@@ -65,9 +66,14 @@ class GameScene: SKScene {
         closeShop.zPosition = shopButton.zPosition
         //shop background
         bckgBox = SKSpriteNode(color: UIColor(ciColor: .white), size: CGSize(width: (scrWidth * 1.5) - safeArea.left - safeArea.right, height: (scrHeight * 1.5) - safeArea.top - safeArea.bottom))
-        //background of shop box
         bckgBox.position = CGPoint(x: 0, y: 0)
-        bckgBox.zPosition = 10
+        bckgBox.zPosition = 6
+        //shop label
+        shopLbl = SKLabelNode(text: "SHOP")
+        shopLbl.fontColor = UIColor(ciColor: .black)
+        shopLbl.position = CGPoint(x: 0, y: bckgBox.size.height / 2 - shopLbl.frame.height)
+        //shopLbl.position = bckgBox.position
+        shopLbl.zPosition = 7
         setPos()
     }
     //sets sprite position to random spot on screen
@@ -83,12 +89,14 @@ class GameScene: SKScene {
         if(open){
             tempTime = time //saves time when buttonw as clicked
             self.addChild(bckgBox)
+            self.addChild(shopLbl)
             shopButton.isHidden = true
             closeShop.isHidden = false
             shopping = true
         } else { //if closed
             time = tempTime
             bckgBox.removeFromParent()
+            shopLbl.removeFromParent()
             shopButton.isHidden = false
             closeShop.isHidden = true
             shopping = false
