@@ -23,7 +23,9 @@ class GameScene: SKScene {
     var clickSprite = SKSpriteNode()
     var shopButton = SKSpriteNode()
     var closeShop = SKSpriteNode()
+    var bckgBox = SKSpriteNode()
     var time: Double = 0
+    var tempTime: Double = 0
     let safeArea = UIApplication.shared.windows[0].safeAreaInsets //gets safe area for each device
     //screen height and width
     var scrHeight: CGFloat = 0
@@ -36,42 +38,67 @@ class GameScene: SKScene {
         scrHeight = self.size.height / 2
         scrWidth = self.size.width / 2
         points = UserDefaults.standard.integer(forKey: "points")
+        //points label at top of screen
         pointsLbl = self.childNode(withName: "pointsLbl") as! SKLabelNode
         pointsLbl.position = CGPoint(x: 0, y: scrHeight - safeArea.top - pointsLbl.frame.height)
         pointsLbl.text = "Points: \(points)"
+        pointsLbl.zPosition = 8
+        //sprite to be clicked
         clickSprite = self.childNode(withName: "clickSprite") as! SKSpriteNode
         clickSprite.isUserInteractionEnabled = false
         clickSprite.size = CGSize(width: 100, height: 100)
-        clickSprite.zPosition = 1
+        clickSprite.zPosition = 9
+        //shop button
         shopButton = self.childNode(withName: "shopButton") as! SKSpriteNode
         shopButton.isUserInteractionEnabled = false
         shopButton.size = CGSize(width: 200, height: 100)
         shopButton.color = UIColor(ciColor: .blue)
         shopButton.position = CGPoint(x: 0, y: -scrHeight + safeArea.bottom + 50)
+        shopButton.zPosition = 7
+        //close shop button
         closeShop = self.childNode(withName: "closeShop") as! SKSpriteNode
         closeShop.size = CGSize(width: 200, height: 100)
         closeShop.isUserInteractionEnabled = false
         closeShop.isHidden = true
         closeShop.color = UIColor(ciColor: .green)
         closeShop.position = shopButton.position
+        closeShop.zPosition = shopButton.zPosition
+        //shop background
+        bckgBox = SKSpriteNode(color: UIColor(ciColor: .white), size: CGSize(width: (scrWidth * 1.5) - safeArea.left - safeArea.right, height: (scrHeight * 1.5) - safeArea.top - safeArea.bottom))
+        //background of shop box
+        bckgBox.position = CGPoint(x: 0, y: 0)
+        bckgBox.zPosition = 10
         setPos()
     }
     //sets sprite position to random spot on screen
     func setPos(){
         //print("Screen Size: \(UIScreen.main.bounds.width) , \(UIScreen.main.bounds.height) \n Scene Size: \(scrWidth) , \(scrHeight)")
+        //^ Prints screen size VS scene size, used to cause bugs
         let xPos: CGFloat = CGFloat.random(in: -scrWidth + 50...scrWidth - 50)
         let yPos: CGFloat = CGFloat.random(in: -scrHeight + 50 + safeArea.bottom...scrHeight - 50 - safeArea.top)
         clickSprite.position = CGPoint(x: xPos, y: yPos)
     }
     //sets up shop
-    func setShop(){
-        print("bruh")
+    func setShop(open: Bool){
+        if(open){
+            tempTime = time //saves time when buttonw as clicked
+            self.addChild(bckgBox)
+            shopButton.isHidden = true
+            closeShop.isHidden = false
+            shopping = true
+        } else { //if closed
+            time = tempTime
+            bckgBox.removeFromParent()
+            shopButton.isHidden = false
+            closeShop.isHidden = true
+            shopping = false
+        }
     }
     //Detects Tap (Beggining) TO ADD: check if touching "click Sprite"
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first!
         let location = touch.location(in: self.view)
-        if clickSprite.contains(touch.location(in: self)) { //if clicksprite is clicked
+        if (!shopping && clickSprite.contains(touch.location(in: self))) { //if clicksprite is clicked
             testData.append(time)
             setPos()
             points += (1 * pointMult)
@@ -83,16 +110,14 @@ class GameScene: SKScene {
         }
         else if (!shopping && shopButton.contains(touch.location(in: self))){ //if shopping
             print("shopping")
-            shopButton.isHidden = true
-            closeShop.isHidden = false
-            shopping = true
-            setShop()
+            setShop(open: true)
         }
         else if (shopping && closeShop.contains(touch.location(in: self))){ //if stopping shopping
             print("stopping")
-            shopButton.isHidden = false
-            closeShop.isHidden = true
-            shopping = false
+            setShop(open: false)
+        }
+        else if (shopping){
+            print("Other click")
         }
         else{ //if sprite not touched
             points += (-1 * pointMult)
