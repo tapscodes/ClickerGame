@@ -24,22 +24,29 @@ class GameScene: SKScene {
     var shopButton = SKSpriteNode()
     var closeShop = SKSpriteNode()
     var time: Double = 0
+    let safeArea = UIApplication.shared.windows[0].safeAreaInsets //gets safe area for each device
+    //screen height and width
+    var scrHeight: CGFloat = 0
+    var scrWidth: CGFloat = 0
     //MARK - Functions
     //Viewdid load
     override func didMove(to view: SKView) {
         gameSC = self
+        gameSC.size = CGSize(width: UIScreen.main.bounds.size.width * 2, height: UIScreen.main.bounds.size.height * 2)
+        scrHeight = self.size.height / 2
+        scrWidth = self.size.width / 2
         pointsLbl = self.childNode(withName: "pointsLbl") as! SKLabelNode
-        pointsLbl.position = CGPoint(x: 0, y: UIScreen.main.bounds.height - 20)
+        pointsLbl.position = CGPoint(x: 0, y: scrHeight - safeArea.top - pointsLbl.frame.height)
         pointsLbl.text = "Points: \(points)"
         clickSprite = self.childNode(withName: "clickSprite") as! SKSpriteNode
         clickSprite.isUserInteractionEnabled = false
-        clickSprite.size = CGSize(width: 75, height: 75)
+        clickSprite.size = CGSize(width: 70, height: 70)
         clickSprite.zPosition = 1
         shopButton = self.childNode(withName: "shopButton") as! SKSpriteNode
         shopButton.isUserInteractionEnabled = false
         shopButton.size = CGSize(width: 100, height: 50)
         shopButton.color = UIColor(ciColor: .blue)
-        shopButton.position = CGPoint(x: 0, y: -UIScreen.main.bounds.height + 15)
+        shopButton.position = CGPoint(x: 0, y: -scrHeight + safeArea.bottom + 25)
         closeShop = self.childNode(withName: "closeShop") as! SKSpriteNode
         closeShop.size = CGSize(width: 100, height: 50)
         closeShop.isUserInteractionEnabled = false
@@ -50,14 +57,9 @@ class GameScene: SKScene {
     }
     //sets sprite position to random spot on screen
     func setPos(){
-        print(shopButton.position.y)
-        print("Screen Size: \(UIScreen.main.bounds) \n Scene Size: \(UIScreen.main.bounds.width)")
-        var xPos: CGFloat = CGFloat.random(in: -UIScreen.main.bounds.width + 75...UIScreen.main.bounds.width - 75)
-        var yPos: CGFloat = CGFloat.random(in: -UIScreen.main.bounds.height + 75...UIScreen.main.bounds.height - 75)
-        /*while(yPos > shopButton.position.y + 25 || yPos < shopButton.position.y - 25){ //makes sure it doesn't spawn fully in the button
-            xPos = CGFloat.random(in: -UIScreen.main.bounds.width + 75...UIScreen.main.bounds.width - 75)
-            yPos = CGFloat.random(in: -UIScreen.main.bounds.height + 75...UIScreen.main.bounds.height - 75)
-        } */
+        print("Screen Size: \(UIScreen.main.bounds.width) , \(UIScreen.main.bounds.height) \n Scene Size: \(scrWidth) , \(scrHeight)")
+        let xPos: CGFloat = CGFloat.random(in: -scrWidth + 35...scrWidth - 35)
+        let yPos: CGFloat = CGFloat.random(in: -scrHeight + 35...scrHeight - 35)
         clickSprite.position = CGPoint(x: xPos, y: yPos)
     }
     //Detects Tap (Beggining) TO ADD: check if touching "click Sprite"
