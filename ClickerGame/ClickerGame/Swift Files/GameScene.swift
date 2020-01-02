@@ -20,11 +20,19 @@ var shopping = false
 class GameScene: SKScene {
     //MARK - Variables
     var pointsLbl = SKLabelNode()
-    var shopLbl = SKLabelNode()
     var clickSprite = SKSpriteNode()
     var shopButton = SKSpriteNode()
     var closeShop = SKSpriteNode()
     var bckgBox = SKSpriteNode()
+    var shopLbl = SKLabelNode()
+    var opt1Box = SKSpriteNode()
+    var opt1Lbl = SKLabelNode()
+    var opt2Box = SKSpriteNode()
+    var opt2Lbl = SKLabelNode()
+    var opt3Box = SKSpriteNode()
+    var opt3Lbl = SKLableNode()
+    var opt4Box = SKSpriteNode()
+    var opt4Lbl = SKLabelNode()
     var time: Double = 0
     var tempTime: Double = 0
     let safeArea = UIApplication.shared.windows[0].safeAreaInsets //gets safe area for each device
@@ -72,9 +80,28 @@ class GameScene: SKScene {
         shopLbl = SKLabelNode(text: "SHOP")
         shopLbl.fontColor = UIColor(ciColor: .black)
         shopLbl.position = CGPoint(x: 0, y: bckgBox.size.height / 2 - shopLbl.frame.height)
-        //shopLbl.position = bckgBox.position
         shopLbl.zPosition = 7
+        //first option
+        opt1Lbl = SKLabelNode(text: "Option 1 : 5 Points")
+        opt1Lbl.fontColor = UIColor(ciColor: .black)
+        opt1Lbl.zPosition = 9
+        opt1Box = SKSpriteNode(color: UIColor(ciColor: .red), size: CGSize(width: bckgBox.size.width / 1.5, height: 100))
+        opt1Box.position = CGPoint(x: 0, y: shopLbl.position.y - (shopLbl.frame.height / 2) - 100)
+        opt1Box.zPosition = 8
+        opt1Lbl.position = opt1Box.position
         setPos()
+        //second option
+        opt2Lbl = SKLabelNode(text: "Option 2 : 10 Points")
+        opt2Lbl.fontColor = UIColor(ciColor: .black)
+        opt2Lbl.zPosition = 9
+        opt2Box = SKSpriteNode(color: UIColor(ciColor: .red), size: CGSize(width: bckgBox.size.width / 1.5, height: 100))
+        opt2Box.position = CGPoint(x: 0, y: shopLbl.position.y - (shopLbl.frame.height / 2) - 300)
+        opt2Box.zPosition = 8
+        opt2Lbl.position = opt2Box.position
+        setPos()
+        //third option
+        //fourth (next set) of options
+        
     }
     //sets sprite position to random spot on screen
     func setPos(){
@@ -90,13 +117,16 @@ class GameScene: SKScene {
             tempTime = time //saves time when buttonw as clicked
             self.addChild(bckgBox)
             self.addChild(shopLbl)
+            self.addChild(opt1Box)
+            self.addChild(opt1Lbl)
+            self.addChild(opt2Box)
+            self.addChild(opt2Lbl)
             shopButton.isHidden = true
             closeShop.isHidden = false
             shopping = true
         } else { //if closed
             time = tempTime
-            bckgBox.removeFromParent()
-            shopLbl.removeFromParent()
+            bckgBox.parent?.removeChildren(in: [bckgBox, shopLbl, opt1Box, opt1Lbl, opt2Box, opt2Lbl])
             shopButton.isHidden = false
             closeShop.isHidden = true
             shopping = false
