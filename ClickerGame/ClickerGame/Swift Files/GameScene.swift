@@ -35,6 +35,7 @@ class GameScene: SKScene {
         gameSC.size = CGSize(width: UIScreen.main.bounds.size.width * 2, height: UIScreen.main.bounds.size.height * 2)
         scrHeight = self.size.height / 2
         scrWidth = self.size.width / 2
+        points = UserDefaults.standard.integer(forKey: "points")
         pointsLbl = self.childNode(withName: "pointsLbl") as! SKLabelNode
         pointsLbl.position = CGPoint(x: 0, y: scrHeight - safeArea.top - pointsLbl.frame.height)
         pointsLbl.text = "Points: \(points)"
@@ -57,9 +58,9 @@ class GameScene: SKScene {
     }
     //sets sprite position to random spot on screen
     func setPos(){
-        print("Screen Size: \(UIScreen.main.bounds.width) , \(UIScreen.main.bounds.height) \n Scene Size: \(scrWidth) , \(scrHeight)")
-        let xPos: CGFloat = CGFloat.random(in: -scrWidth + 40...scrWidth - 40)
-        let yPos: CGFloat = CGFloat.random(in: -scrHeight + 40 + safeArea.bottom...scrHeight - 40 - safeArea.top)
+        //print("Screen Size: \(UIScreen.main.bounds.width) , \(UIScreen.main.bounds.height) \n Scene Size: \(scrWidth) , \(scrHeight)")
+        let xPos: CGFloat = CGFloat.random(in: -scrWidth + 50...scrWidth - 50)
+        let yPos: CGFloat = CGFloat.random(in: -scrHeight + 50 + safeArea.bottom...scrHeight - 50 - safeArea.top)
         clickSprite.position = CGPoint(x: xPos, y: yPos)
     }
     //sets up shop
@@ -98,6 +99,7 @@ class GameScene: SKScene {
             print("Location: \(location) , Sprite Location: \(clickSprite.position), Points: \(points)")
             pointsLbl.text = "Points: \(points)"
         }
+        UserDefaults.standard.set(points, forKey: "points")
     }
     //Update function
     override func update(_ currentTime: TimeInterval) {
