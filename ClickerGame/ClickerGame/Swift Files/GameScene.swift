@@ -47,7 +47,7 @@ class GameScene: SKScene {
         scrHeight = self.size.height / 2
         scrWidth = self.size.width / 2
         points = UserDefaults.standard.integer(forKey: "points")
-        let scrDiv = (bckgBox.size.height - shopLbl.frame.height ) / 2
+        let scrDiv = (bckgBox.size.height - (shopLbl.frame.height * 2)) / 2
         //points label at top of screen
         pointsLbl = self.childNode(withName: "pointsLbl") as! SKLabelNode
         pointsLbl.position = CGPoint(x: 0, y: scrHeight - safeArea.top - pointsLbl.frame.height)
@@ -82,6 +82,7 @@ class GameScene: SKScene {
         shopLbl.fontColor = UIColor(ciColor: .black)
         shopLbl.position = CGPoint(x: 0, y: (bckgBox.size.height / 2) - shopLbl.frame.height)
         shopLbl.zPosition = 7
+        /*
         //fourth (next set) of options
         opt4Lbl = SKLabelNode(text: "Option 4 : 20 Points")
         opt4Lbl.fontColor = UIColor(ciColor: .black)
@@ -114,6 +115,7 @@ class GameScene: SKScene {
         opt3Box.position = CGPoint(x: 0, y: opt2Box.position.y + (scrDiv / 2))
         opt3Box.zPosition = 8
         opt3Lbl.position = opt3Box.position
+        */
         setPos()
     }
     //sets sprite position to random spot on screen
