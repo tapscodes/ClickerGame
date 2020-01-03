@@ -56,11 +56,13 @@ class GameScene: SKScene {
         gameSC.size = CGSize(width: UIScreen.main.bounds.size.width * 2, height: UIScreen.main.bounds.size.height * 2)
         scrHeight = self.size.height / 2
         scrWidth = self.size.width / 2
-        if(UserDefaults.standard.double(forKey: "ptMult") != 0){ //checks for first time load
+        print(fastestTime) //gets 100
+        if(UserDefaults.standard.double(forKey: "points") != 0){ //checks for first time load
             points = UserDefaults.standard.double(forKey: "points")
             pointMult = UserDefaults.standard.double(forKey: "ptMult")
             autoPts = UserDefaults.standard.double(forKey: "autoPts")
             fastestTime = UserDefaults.standard.double(forKey: "fastTM")
+            print(fastestTime) //gets 0
             music = UserDefaults.standard.bool(forKey: "music")
             bestSlowCombo = UserDefaults.standard.integer(forKey: "slowCombo")
             bestFastCombo = UserDefaults.standard.integer(forKey: "fastCombo")
@@ -200,6 +202,7 @@ class GameScene: SKScene {
     }
     func setRecords(set: Bool){
         if(set){ //if checking records
+            tempTime = time //saves time when buttonw as clicked
             shopLbl.text = "Records"
             opt3Lbl.text = "Best Fast Combo: \(bestFastCombo)"
             opt2Lbl.text = "Best Combo: \(bestSlowCombo)"
@@ -213,6 +216,7 @@ class GameScene: SKScene {
             record = true
             recordBtn.color = UIColor(ciColor: .magenta)
         } else { //if closing records
+            time = tempTime
             bckgBox.parent?.removeChildren(in: [bckgBox, shopLbl, opt1Lbl, opt2Lbl, opt3Lbl])
             record = false
             recordBtn.color = UIColor(ciColor: .yellow)
@@ -224,11 +228,11 @@ class GameScene: SKScene {
         let location = touch.location(in: self.view)
         if(!shopping && !record){
             if (clickSprite.contains(touch.location(in: self))) { //if clicksprite is clicked
-                setPos()
+                print(time)
                 points += pointMult
                 if(time < fastestTime){
                     fastestTime = time
-                    UserDefaults.standard.set(fastestTime, forKey: "fastTm")
+                    UserDefaults.standard.set(fastestTime, forKey: "fastTM")
                 }
                 if(fastActive && time < 0.5){ //on fast combo pace (top 50% of data)
                     fastCombo += 1
@@ -236,7 +240,7 @@ class GameScene: SKScene {
                     comboLbl.isHidden = false
                     comboLbl.text = "(Fast) Combo: \(slowCombo)"
                 } else if (time < 1.0){ //on slow combo pace (top 50% of data)
-                    if(slowCombo > 1){
+                    if(slowCombo <= 1){
                     fastActive = false
                     }
                     slowCombo += 1
@@ -258,6 +262,7 @@ class GameScene: SKScene {
                     fastActive = true
                 }
                 time = 0
+                setPos()
             }
             else if(shopBtn.contains(touch.location(in: self))){ //if shopping
                 setShop(open: true)
