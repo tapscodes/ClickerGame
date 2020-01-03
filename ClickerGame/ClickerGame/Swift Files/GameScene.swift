@@ -47,6 +47,7 @@ class GameScene: SKScene {
         scrHeight = self.size.height / 2
         scrWidth = self.size.width / 2
         points = UserDefaults.standard.integer(forKey: "points")
+        let scrDiv = (bckgBox.size.height - shopLbl.frame.height ) / 2
         //points label at top of screen
         pointsLbl = self.childNode(withName: "pointsLbl") as! SKLabelNode
         pointsLbl.position = CGPoint(x: 0, y: scrHeight - safeArea.top - pointsLbl.frame.height)
@@ -79,29 +80,41 @@ class GameScene: SKScene {
         //shop label
         shopLbl = SKLabelNode(text: "SHOP")
         shopLbl.fontColor = UIColor(ciColor: .black)
-        shopLbl.position = CGPoint(x: 0, y: bckgBox.size.height / 2 - shopLbl.frame.height)
+        shopLbl.position = CGPoint(x: 0, y: (bckgBox.size.height / 2) - shopLbl.frame.height)
         shopLbl.zPosition = 7
+        //fourth (next set) of options
+        opt4Lbl = SKLabelNode(text: "Option 4 : 20 Points")
+        opt4Lbl.fontColor = UIColor(ciColor: .black)
+        opt4Lbl.zPosition = 9
+        opt4Box = SKSpriteNode(color: UIColor(ciColor: .red), size: CGSize(width: bckgBox.size.width / 1.5, height: 100))
+        opt4Box.position = CGPoint(x: 0, y: -(scrDiv) + (opt4Box.size.height / 2) + (shopLbl.frame.height / 2))
+        opt4Box.zPosition = 8
+        opt4Lbl.position = opt4Box.position
         //first option
         opt1Lbl = SKLabelNode(text: "Option 1 : 5 Points")
         opt1Lbl.fontColor = UIColor(ciColor: .black)
         opt1Lbl.zPosition = 9
         opt1Box = SKSpriteNode(color: UIColor(ciColor: .red), size: CGSize(width: bckgBox.size.width / 1.5, height: 100))
-        opt1Box.position = CGPoint(x: 0, y: shopLbl.position.y - (shopLbl.frame.height / 2) - 100)
+        opt1Box.position = CGPoint(x: 0, y: opt4Box.position.y + (scrDiv / 2))
         opt1Box.zPosition = 8
         opt1Lbl.position = opt1Box.position
-        setPos()
         //second option
         opt2Lbl = SKLabelNode(text: "Option 2 : 10 Points")
         opt2Lbl.fontColor = UIColor(ciColor: .black)
         opt2Lbl.zPosition = 9
         opt2Box = SKSpriteNode(color: UIColor(ciColor: .red), size: CGSize(width: bckgBox.size.width / 1.5, height: 100))
-        opt2Box.position = CGPoint(x: 0, y: shopLbl.position.y - (shopLbl.frame.height / 2) - 300)
+        opt2Box.position = CGPoint(x: 0, y: opt1Box.position.y + (scrDiv / 2))
         opt2Box.zPosition = 8
         opt2Lbl.position = opt2Box.position
-        setPos()
         //third option
-        //fourth (next set) of options
-        
+        opt3Lbl = SKLabelNode(text: "Option 3 : 15 Points")
+        opt3Lbl.fontColor = UIColor(ciColor: .black)
+        opt3Lbl.zPosition = 9
+        opt3Box = SKSpriteNode(color: UIColor(ciColor: .red), size: CGSize(width: bckgBox.size.width / 1.5, height: 100))
+        opt3Box.position = CGPoint(x: 0, y: opt2Box.position.y + (scrDiv / 2))
+        opt3Box.zPosition = 8
+        opt3Lbl.position = opt3Box.position
+        setPos()
     }
     //sets sprite position to random spot on screen
     func setPos(){
@@ -121,12 +134,16 @@ class GameScene: SKScene {
             self.addChild(opt1Lbl)
             self.addChild(opt2Box)
             self.addChild(opt2Lbl)
+            self.addChild(opt3Box)
+            self.addChild(opt3Lbl)
+            self.addChild(opt4Box)
+            self.addChild(opt4Lbl)
             shopButton.isHidden = true
             closeShop.isHidden = false
             shopping = true
         } else { //if closed
             time = tempTime
-            bckgBox.parent?.removeChildren(in: [bckgBox, shopLbl, opt1Box, opt1Lbl, opt2Box, opt2Lbl])
+            bckgBox.parent?.removeChildren(in: [bckgBox, shopLbl, opt1Box, opt1Lbl, opt2Box, opt2Lbl, opt3Box, opt3Lbl, opt4Box, opt4Lbl])
             shopButton.isHidden = false
             closeShop.isHidden = true
             shopping = false
@@ -136,31 +153,46 @@ class GameScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first!
         let location = touch.location(in: self.view)
-        if (!shopping && clickSprite.contains(touch.location(in: self))) { //if clicksprite is clicked
-            testData.append(time)
-            setPos()
-            points += (1 * pointMult)
-            if(time < fastestTime){
-                fastestTime = time
+        if(!shopping){
+            if (clickSprite.contains(touch.location(in: self))) { //if clicksprite is clicked
+                testData.append(time)
+                setPos()
+                points += (1 * pointMult)
+                if(time < fastestTime){
+                    fastestTime = time
+                }
+                time = 0
+                pointsLbl.text = "Points: \(points)"
             }
-            time = 0
-            pointsLbl.text = "Points: \(points)"
-        }
-        else if (!shopping && shopButton.contains(touch.location(in: self))){ //if shopping
-            print("shopping")
-            setShop(open: true)
-        }
-        else if (shopping && closeShop.contains(touch.location(in: self))){ //if stopping shopping
-            print("stopping")
-            setShop(open: false)
-        }
-        else if (shopping){
-            print("Other click")
-        }
-        else{ //if sprite not touched
-            points += (-1 * pointMult)
-            print("Location: \(location) , Sprite Location: \(clickSprite.position), Points: \(points)")
-            pointsLbl.text = "Points: \(points)"
+            else if (shopButton.contains(touch.location(in: self))){ //if shopping
+                print("shopping")
+                setShop(open: true)
+            }
+            else{ //if sprite not touched
+                points += (-1 * pointMult)
+                print("Location: \(location) , Sprite Location: \(clickSprite.position), Points: \(points)")
+                pointsLbl.text = "Points: \(points)"
+            }
+        } else { //if shopping
+            if (closeShop.contains(touch.location(in: self))){ //if stopping shopping
+                print("stopping")
+                setShop(open: false)
+            }
+            else if (opt1Box.contains(touch.location(in: self))){ //first option
+                print("option1")
+            }
+            else if (opt2Box.contains(touch.location(in: self))){ //second option
+                print("option2")
+            }
+            else if (opt3Box.contains(touch.location(in: self))){ //third option
+                print("option3")
+            }
+            else if (opt4Box.contains(touch.location(in: self))){ //fourth option
+                print("option4")
+            }
+            else{
+                print("Other click")
+            }
         }
         UserDefaults.standard.set(points, forKey: "points")
     }
