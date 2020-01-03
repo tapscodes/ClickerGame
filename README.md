@@ -3,9 +3,9 @@ A game idea that I came up with where a user gets points for clicking an object 
 ## To Be Added
 - Actual Sprite (Debatable)
 - GameCenter support?
-- Combo Multiplayer
-- App Icon
+- Combo Point Multiplier
+- Real App Icon
 ## Current Bugs
-- Fastest Combo isn't calculated correctly
+- None
 ## Official Release Date
 Whenever its finished and hopefully on the appstore.
