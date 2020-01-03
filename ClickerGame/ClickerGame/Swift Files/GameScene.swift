@@ -230,13 +230,15 @@ class GameScene: SKScene {
                     fastestTime = time
                     UserDefaults.standard.set(fastestTime, forKey: "fastTm")
                 }
-                if(fastActive && time < 0.4){ //on fast combo pace (top 10% of data)
+                if(fastActive && time < 0.5){ //on fast combo pace (top 50% of data)
                     fastCombo += 1
                     slowCombo += 1
                     comboLbl.isHidden = false
-                    comboLbl.text = "Combo: \(slowCombo)"
+                    comboLbl.text = "(Fast) Combo: \(slowCombo)"
                 } else if (time < 1.0){ //on slow combo pace (top 50% of data)
+                    if(slowCombo > 1){
                     fastActive = false
+                    }
                     slowCombo += 1
                     comboLbl.isHidden = false
                     comboLbl.text = "Combo: \(slowCombo)"
@@ -244,11 +246,11 @@ class GameScene: SKScene {
                     //checks for new records
                     if(fastCombo > bestFastCombo){
                         bestFastCombo = fastCombo
-                        UserDefaults.standard.set(pointMult, forKey: "fastCombo")
+                        UserDefaults.standard.set(bestFastCombo, forKey: "fastCombo")
                     }
                     if(slowCombo > bestSlowCombo){
                         bestSlowCombo = slowCombo
-                        UserDefaults.standard.set(pointMult, forKey: "slowCombo")
+                        UserDefaults.standard.set(bestSlowCombo, forKey: "slowCombo")
                     }
                     comboLbl.isHidden = true
                     fastCombo = 0
@@ -269,6 +271,15 @@ class GameScene: SKScene {
                 pointsLbl.text = "Points: \(points)"
                 //resets combo
                 comboLbl.isHidden = true
+                //checks for new records
+                if(fastCombo > bestFastCombo){
+                    bestFastCombo = fastCombo
+                    UserDefaults.standard.set(bestFastCombo, forKey: "fastCombo")
+                }
+                if(slowCombo > bestSlowCombo){
+                    bestSlowCombo = slowCombo
+                    UserDefaults.standard.set(bestSlowCombo, forKey: "slowCombo")
+                }
                 fastCombo = 0
                 slowCombo = 0
                 fastActive = true
