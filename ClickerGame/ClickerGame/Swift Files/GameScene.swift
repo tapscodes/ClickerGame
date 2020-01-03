@@ -228,7 +228,6 @@ class GameScene: SKScene {
         let location = touch.location(in: self.view)
         if(!shopping && !record){
             if (clickSprite.contains(touch.location(in: self))) { //if clicksprite is clicked
-                print(time)
                 points += pointMult
                 if(time < fastestTime){
                     fastestTime = time
@@ -329,10 +328,10 @@ class GameScene: SKScene {
             else{
                 print("Other click")
             }
-            UserDefaults.standard.set(music, forKey: "music")
-            UserDefaults.standard.set(pointMult, forKey: "ptMult")
-            UserDefaults.standard.set(autoPts, forKey: "autoPts")
         }
+        UserDefaults.standard.set(music, forKey: "music")
+        UserDefaults.standard.set(pointMult, forKey: "ptMult")
+        UserDefaults.standard.set(autoPts, forKey: "autoPts")
         UserDefaults.standard.set(points, forKey: "points")
         let ptString = Double(round(100 * points) / 100)
         pointsLbl.text = "Points: \(ptString)" //changes it to 2 decimals
