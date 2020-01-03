@@ -58,7 +58,7 @@ class GameScene: SKScene {
         //points label at top of screen
         pointsLbl = self.childNode(withName: "pointsLbl") as! SKLabelNode
         pointsLbl.position = CGPoint(x: 0, y: scrHeight - safeArea.top - pointsLbl.frame.height)
-        let ptString = String(format: "%.2f", points)
+        let ptString = Double(round(100 * points) / 100)
         pointsLbl.text = "Points: \(ptString)"
         pointsLbl.zPosition = 2
         //sprite to be clicked
@@ -228,7 +228,7 @@ class GameScene: SKScene {
         UserDefaults.standard.set(pointMult, forKey: "ptMult")
         UserDefaults.standard.set(autoPts, forKey: "autoPts")
         UserDefaults.standard.set(points, forKey: "points")
-        let ptString = String(format: "%.2f", points)
+        let ptString = Double(round(100 * points) / 100)
         pointsLbl.text = "Points: \(ptString)" //changes it to 2 decimals
     }
     //Update function
