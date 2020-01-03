@@ -131,12 +131,12 @@ class GameScene: SKScene {
         gameVC.playSong(song: "bckgLoop")
         setPos()
     }
-    //sets sprite position to random spot on screen
+    //sets sprite position to random spot on screen (above and below other things on screen)
     func setPos(){
         //print("Screen Size: \(UIScreen.main.bounds.width) , \(UIScreen.main.bounds.height) \n Scene Size: \(scrWidth) , \(scrHeight)")
-        //^ Prints screen size VS scene size, used to cause bugs
+        //^ Prints screen size VS scene size, used to bugs
         let xPos: CGFloat = CGFloat.random(in: -scrWidth + 50...scrWidth - 50)
-        let yPos: CGFloat = CGFloat.random(in: -scrHeight + 50 + safeArea.bottom...scrHeight - 50 - safeArea.top)
+        let yPos: CGFloat = CGFloat.random(in: -scrHeight + 50 + safeArea.bottom + shopButton.size.height...scrHeight - 50 - safeArea.top - pointsLbl.frame.height)
         clickSprite.position = CGPoint(x: xPos, y: yPos)
     }
     //sets up shop
@@ -222,11 +222,10 @@ class GameScene: SKScene {
             else{
                 print("Other click")
             }
+            UserDefaults.standard.set(music, forKey: "music")
+            UserDefaults.standard.set(pointMult, forKey: "ptMult")
+            UserDefaults.standard.set(autoPts, forKey: "autoPts")
         }
-        //save here to not cause problems with first time loads
-        UserDefaults.standard.set(music, forKey: "music")
-        UserDefaults.standard.set(pointMult, forKey: "ptMult")
-        UserDefaults.standard.set(autoPts, forKey: "autoPts")
         UserDefaults.standard.set(points, forKey: "points")
         let ptString = Double(round(100 * points) / 100)
         pointsLbl.text = "Points: \(ptString)" //changes it to 2 decimals
@@ -236,9 +235,11 @@ class GameScene: SKScene {
         // Called before each frame is rendered
         time += (1/60)
         autoTime += (1/60)
-        if(autoTime > 20){
+        if(autoTime >= 20){
             autoTime = 0
             points += autoPts
+            let ptString = Double(round(100 * points) / 100)
+            pointsLbl.text = "Points: \(ptString)" //changes it to 2 decimals
             UserDefaults.standard.set(points, forKey: "points")
         }
     }
