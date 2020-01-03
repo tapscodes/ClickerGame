@@ -3,9 +3,6 @@ A game idea that I came up with where a user gets points for clicking an object 
 ## To Be Added
 - Highscores
 - Actual Sprite (Debatable)
-- Music
-- Shop Things
-- CoreData to save highscores+points on device
 - GameCenter support?
 - Combos (Possibly several types)
 - App Icon
