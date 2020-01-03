@@ -39,18 +39,20 @@ class GameViewController: UIViewController {
                 SKview.presentScene(scene)
             }
         }
+        //playSong(song: "bckgLoop") <- background music disabled
     }
     //sets song to title given
     func playSong(song: String){
         musicPlayer.stop()
-            do{
-                let song1 = Bundle.main.path(forResource: song, ofType: "mp3")
-                try musicPlayer = AVAudioPlayer(contentsOf: NSURL(fileURLWithPath: song1!) as URL)
-            } catch {
-                print("NO SONG FILE for \(song)")
-            }
+        let songPath = Bundle.main.path(forResource: song, ofType: "mp3")
+        let songURL = URL(fileURLWithPath: songPath!)
+        do{
+            musicPlayer = try AVAudioPlayer(contentsOf: songURL)
             musicPlayer.numberOfLoops = -1
             musicPlayer.play()
+        } catch {
+            print("No Song Found")
+        }
     }
     //makes a basic alert with an ok button and presents it
     func makeAlert(scene: SKScene, message: String){

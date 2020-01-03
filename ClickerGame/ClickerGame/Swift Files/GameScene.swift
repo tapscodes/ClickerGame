@@ -30,7 +30,7 @@ class GameScene: SKScene {
     var opt2Box = SKSpriteNode()
     var opt2Lbl = SKLabelNode()
     var opt3Box = SKSpriteNode()
-    var opt3Lbl = SKLableNode()
+    var opt3Lbl = SKLabelNode()
     var opt4Box = SKSpriteNode()
     var opt4Lbl = SKLabelNode()
     var time: Double = 0
