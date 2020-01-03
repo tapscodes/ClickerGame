@@ -88,43 +88,49 @@ class GameScene: SKScene {
         //shop label
         shopLbl = SKLabelNode(text: "SHOP")
         shopLbl.fontColor = UIColor(ciColor: .black)
+        shopLbl.fontName = pointsLbl.fontName
+        shopLbl.fontSize = 100
         shopLbl.position = CGPoint(x: 0, y: (bckgBox.size.height / 2) - shopLbl.frame.height)
         shopLbl.zPosition = 7
         let scrDiv = (bckgBox.size.height - (shopLbl.frame.height * 2)) / 2
         //fourth (next set) of options
         opt4Lbl = SKLabelNode(text: "Music: OFF")
         opt4Lbl.fontColor = UIColor(ciColor: .black)
+        opt4Lbl.fontName = pointsLbl.fontName
         opt4Lbl.zPosition = 9
         opt4Box = SKSpriteNode(color: UIColor(ciColor: .red), size: CGSize(width: bckgBox.size.width / 1.5, height: 100))
         let b4Y = -(scrDiv) + (opt4Box.size.height / 2) + (shopLbl.frame.height / 2)
         print(scrDiv)
         opt4Box.position = CGPoint(x: 0, y: b4Y)
         opt4Box.zPosition = 8
-        opt4Lbl.position = opt4Box.position
+        opt4Lbl.position = CGPoint(x: opt4Box.position.x ,y: opt4Box.position.y - (opt4Lbl.frame.height / 2))
         //first option
         opt1Lbl = SKLabelNode(text: "Upgrade Click Worth")
         opt1Lbl.fontColor = UIColor(ciColor: .black)
+        opt1Lbl.fontName = pointsLbl.fontName
         opt1Lbl.zPosition = 9
         opt1Box = SKSpriteNode(color: UIColor(ciColor: .red), size: CGSize(width: bckgBox.size.width / 1.5, height: 100))
         opt1Box.position = CGPoint(x: 0, y: opt4Box.position.y + (scrDiv / 2))
         opt1Box.zPosition = 8
-        opt1Lbl.position = opt1Box.position
+        opt1Lbl.position = CGPoint(x: opt1Box.position.x ,y: opt1Box.position.y - (opt1Lbl.frame.height / 2))
         //second option
         opt2Lbl = SKLabelNode(text: "Upgrade Auto-Clicker")
         opt2Lbl.fontColor = UIColor(ciColor: .black)
+        opt2Lbl.fontName = pointsLbl.fontName
         opt2Lbl.zPosition = 9
         opt2Box = SKSpriteNode(color: UIColor(ciColor: .red), size: CGSize(width: bckgBox.size.width / 1.5, height: 100))
         opt2Box.position = CGPoint(x: 0, y: opt1Box.position.y + (scrDiv / 2))
         opt2Box.zPosition = 8
-        opt2Lbl.position = opt2Box.position
+        opt2Lbl.position = CGPoint(x: opt2Box.position.x ,y: opt2Box.position.y - (opt2Lbl.frame.height / 2))
         //third option
         opt3Lbl = SKLabelNode(text: "Remove ADS")
         opt3Lbl.fontColor = UIColor(ciColor: .black)
+        opt3Lbl.fontName = pointsLbl.fontName
         opt3Lbl.zPosition = 9
         opt3Box = SKSpriteNode(color: UIColor(ciColor: .red), size: CGSize(width: bckgBox.size.width / 1.5, height: 100))
         opt3Box.position = CGPoint(x: 0, y: opt2Box.position.y + (scrDiv / 2))
         opt3Box.zPosition = 8
-        opt3Lbl.position = opt3Box.position
+        opt3Lbl.position = CGPoint(x: opt3Box.position.x ,y: opt3Box.position.y - (opt3Lbl.frame.height / 2))
         if(music){ //changes text if music is on
             opt4Lbl.text = "Music: ON"
         }
@@ -153,12 +159,14 @@ class GameScene: SKScene {
             self.addChild(opt3Lbl)
             self.addChild(opt4Box)
             self.addChild(opt4Lbl)
+            clickSprite.isHidden = true
             shopButton.isHidden = true
             closeShop.isHidden = false
             shopping = true
         } else { //if closed
             time = tempTime
             bckgBox.parent?.removeChildren(in: [bckgBox, shopLbl, opt1Box, opt1Lbl, opt2Box, opt2Lbl, opt3Box, opt3Lbl, opt4Box, opt4Lbl])
+            clickSprite.isHidden = false
             shopButton.isHidden = false
             closeShop.isHidden = true
             shopping = false
