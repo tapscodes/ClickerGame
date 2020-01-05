@@ -20,6 +20,7 @@ var fastCombo: Int = 0
 var fastestTime: Double = 100
 var bestSlowCombo: Int = 0
 var bestFastCombo: Int = 0
+var bestComboMult: Double = 1
 var shopping = false
 var record = false
 var fastActive = true // fast combo active
@@ -41,14 +42,17 @@ class GameScene: SKScene {
     var opt3Lbl = SKLabelNode()
     var opt4Box = SKSpriteNode()
     var opt4Lbl = SKLabelNode()
-    var comboLbl = SKLabelNode()
+    var comboNumLbl = SKLabelNode()
+    var comboMultLbl = SKLabelNode()
     var time: Double = 0
     var autoTime: Double = 0
     var tempTime: Double = 0
+    var comboMult: Double = 1
     let safeArea = UIApplication.shared.windows[0].safeAreaInsets //gets safe area for each device
     //screen height and width
     var scrHeight: CGFloat = 0
     var scrWidth: CGFloat = 0
+    var triggered: Bool = false
     //MARK - Functions
     //Viewdid load
     override func didMove(to view: SKView) {
@@ -56,13 +60,12 @@ class GameScene: SKScene {
         gameSC.size = CGSize(width: UIScreen.main.bounds.size.width * 2, height: UIScreen.main.bounds.size.height * 2)
         scrHeight = self.size.height / 2
         scrWidth = self.size.width / 2
-        print(fastestTime) //gets 100
         if(UserDefaults.standard.double(forKey: "points") != 0){ //checks for first time load
             points = UserDefaults.standard.double(forKey: "points")
             pointMult = UserDefaults.standard.double(forKey: "ptMult")
             autoPts = UserDefaults.standard.double(forKey: "autoPts")
             fastestTime = UserDefaults.standard.double(forKey: "fastTM")
-            print(fastestTime) //gets 0
+            bestComboMult = UserDefaults.standard.double(forKey: "comboMult")
             music = UserDefaults.standard.bool(forKey: "music")
             bestSlowCombo = UserDefaults.standard.integer(forKey: "slowCombo")
             bestFastCombo = UserDefaults.standard.integer(forKey: "fastCombo")
@@ -147,14 +150,23 @@ class GameScene: SKScene {
         opt3Box.position = CGPoint(x: 0, y: opt2Box.position.y + (scrDiv / 2))
         opt3Box.zPosition = 8
         opt3Lbl.position = CGPoint(x: opt3Box.position.x ,y: opt3Box.position.y - (opt3Lbl.frame.height / 2))
-        comboLbl = SKLabelNode(text: "Combo: 0")
-        comboLbl.fontColor = pointsLbl.fontColor
-        comboLbl.fontSize = pointsLbl.fontSize - 10
-        comboLbl.fontName = pointsLbl.fontName
-        comboLbl.position = CGPoint(x: pointsLbl.position.x ,y: pointsLbl.position.y - (comboLbl.frame.height * 2))
-        comboLbl.zPosition = 7
-        comboLbl.isHidden = true
-        self.addChild(comboLbl)
+        comboNumLbl = SKLabelNode(text: "Combo: 0")
+        comboNumLbl.fontColor = pointsLbl.fontColor
+        comboNumLbl.fontSize = pointsLbl.fontSize - 10
+        comboNumLbl.fontName = pointsLbl.fontName
+        comboNumLbl.position = CGPoint(x: pointsLbl.position.x ,y: pointsLbl.position.y - pointsLbl.frame.height - (comboNumLbl.frame.height / 2))
+        comboNumLbl.zPosition = 7
+        comboNumLbl.isHidden = true
+        comboMultLbl = SKLabelNode(text: "\(comboMult)x")
+        comboMultLbl.fontColor = pointsLbl.fontColor
+        comboMultLbl.fontSize = comboMultLbl.fontSize - 5
+        comboMultLbl.fontName = pointsLbl.fontName
+        comboMultLbl.position = CGPoint(x: comboNumLbl.position.x ,y: comboNumLbl.position.y - (comboNumLbl.frame.height / 2) - (comboMultLbl.frame.height / 2))
+        comboMultLbl.zPosition = 7
+        comboMultLbl.isHidden = true
+        comboNumLbl.isHidden = true
+        self.addChild(comboNumLbl)
+        self.addChild(comboMultLbl)
         if(music){ //changes text if music is on
             opt4Lbl.text = "Music: ON"
         }
@@ -166,7 +178,7 @@ class GameScene: SKScene {
         //print("Screen Size: \(UIScreen.main.bounds.width) , \(UIScreen.main.bounds.height) \n Scene Size: \(scrWidth) , \(scrHeight)")
         //^ Prints screen size VS scene size, used to bugs
         let xPos: CGFloat = CGFloat.random(in: -scrWidth + 50...scrWidth - 50)
-        let yPos: CGFloat = CGFloat.random(in: -scrHeight + 50 + safeArea.bottom + shopBtn.size.height...scrHeight - 50 - safeArea.top - pointsLbl.frame.height)
+        let yPos: CGFloat = CGFloat.random(in: -scrHeight + 50 + safeArea.bottom + shopBtn.size.height...scrHeight - 50 - safeArea.top - pointsLbl.frame.height - comboNumLbl.frame.height - comboMultLbl.frame.height)
         clickSprite.position = CGPoint(x: xPos, y: yPos)
     }
     //sets up shop
@@ -207,17 +219,20 @@ class GameScene: SKScene {
             opt3Lbl.text = "Best Fast Combo: \(bestFastCombo)"
             opt2Lbl.text = "Best Combo: \(bestSlowCombo)"
             let fastString = Double(round(100 * fastestTime) / 100)
-            opt1Lbl.text = "Fastest Click: \(fastString)"
+            opt4Lbl.text = "Fastest Click: \(fastString)"
+            let bestCombo = Double(round(100 * bestComboMult) / 100)
+            opt1Lbl.text = "Largest Combo Multiplier: \(bestCombo)"
             self.addChild(bckgBox)
             self.addChild(shopLbl)
             self.addChild(opt1Lbl)
             self.addChild(opt2Lbl)
             self.addChild(opt3Lbl)
+            self.addChild(opt4Lbl)
             record = true
             recordBtn.color = UIColor(ciColor: .magenta)
         } else { //if closing records
             time = tempTime
-            bckgBox.parent?.removeChildren(in: [bckgBox, shopLbl, opt1Lbl, opt2Lbl, opt3Lbl])
+            bckgBox.parent?.removeChildren(in: [bckgBox, shopLbl, opt1Lbl, opt2Lbl, opt3Lbl, opt4Lbl])
             record = false
             recordBtn.color = UIColor(ciColor: .yellow)
         }
@@ -228,7 +243,8 @@ class GameScene: SKScene {
         let location = touch.location(in: self.view)
         if(!shopping && !record){
             if (clickSprite.contains(touch.location(in: self))) { //if clicksprite is clicked
-                points += pointMult
+                triggered = false
+                points += pointMult * comboMult
                 if(time < fastestTime){
                     fastestTime = time
                     UserDefaults.standard.set(fastestTime, forKey: "fastTM")
@@ -236,29 +252,23 @@ class GameScene: SKScene {
                 if(fastActive && time < 0.5){ //on fast combo pace (top 50% of data)
                     fastCombo += 1
                     slowCombo += 1
-                    comboLbl.isHidden = false
-                    comboLbl.text = "(Fast) Combo: \(slowCombo)"
+                    comboMult += 0.05
+                    comboNumLbl.isHidden = false
+                    comboMultLbl.isHidden = false
+                    comboNumLbl.text = "(Fast) Combo: \(slowCombo)"
+                    let ptString = Double(round(100 * comboMult) / 100)
+                    comboMultLbl.text = "\(ptString)x"
                 } else if (time < 1.0){ //on slow combo pace (top 50% of data)
-                    if(slowCombo <= 1){
                     fastActive = false
-                    }
+                    comboMult += 0.01
                     slowCombo += 1
-                    comboLbl.isHidden = false
-                    comboLbl.text = "Combo: \(slowCombo)"
+                    comboNumLbl.isHidden = false
+                    comboMultLbl.isHidden = false
+                    comboNumLbl.text = "Combo: \(slowCombo)"
+                    let ptString = Double(round(100 * comboMult) / 100)
+                    comboMultLbl.text = "\(ptString)x"
                 } else { //combo dropped
-                    //checks for new records
-                    if(fastCombo > bestFastCombo){
-                        bestFastCombo = fastCombo
-                        UserDefaults.standard.set(bestFastCombo, forKey: "fastCombo")
-                    }
-                    if(slowCombo > bestSlowCombo){
-                        bestSlowCombo = slowCombo
-                        UserDefaults.standard.set(bestSlowCombo, forKey: "slowCombo")
-                    }
-                    comboLbl.isHidden = true
-                    fastCombo = 0
-                    slowCombo = 0
-                    fastActive = true
+                    print("Other Tap")
                 }
                 time = 0
                 setPos()
@@ -270,11 +280,11 @@ class GameScene: SKScene {
                 setRecords(set: true)
             }
             else{ //if sprite not touched
-                points += -pointMult
+                points += -pointMult * comboMult
                 print("Locatin: \(location) , Sprite Location: \(clickSprite.position), Points: \(points)")
                 pointsLbl.text = "Points: \(points)"
                 //resets combo
-                comboLbl.isHidden = true
+                comboNumLbl.isHidden = true
                 //checks for new records
                 if(fastCombo > bestFastCombo){
                     bestFastCombo = fastCombo
@@ -284,15 +294,20 @@ class GameScene: SKScene {
                     bestSlowCombo = slowCombo
                     UserDefaults.standard.set(bestSlowCombo, forKey: "slowCombo")
                 }
+                if(comboMult >= bestComboMult){
+                    bestComboMult = comboMult
+                    UserDefaults.standard.set(bestComboMult, forKey: "comboMult")
+                }
                 fastCombo = 0
                 slowCombo = 0
+                comboMult = 1
                 fastActive = true
             }
         } else if(record){ //if checking records
             if(recordBtn.contains(touch.location(in: self))){
                 setRecords(set: false)
             } else {
-                print("other tap")
+                print("Other Tap")
             }
         } else { //if shopping
             if (closeShop.contains(touch.location(in: self))){ //if stopping shopping
@@ -326,7 +341,7 @@ class GameScene: SKScene {
                 gameVC.playSong(song: "bckgLoop")
             }
             else{
-                print("Other click")
+                print("Other Tap")
             }
         }
         UserDefaults.standard.set(music, forKey: "music")
@@ -347,6 +362,28 @@ class GameScene: SKScene {
             let ptString = Double(round(100 * points) / 100)
             pointsLbl.text = "Points: \(ptString)" //changes it to 2 decimals
             UserDefaults.standard.set(points, forKey: "points")
+        }
+        if(!triggered && time >= 1){
+            //checks for new records
+            if(fastCombo > bestFastCombo){
+                bestFastCombo = fastCombo
+                UserDefaults.standard.set(bestFastCombo, forKey: "fastCombo")
+            }
+            if(slowCombo > bestSlowCombo){
+                bestSlowCombo = slowCombo
+                UserDefaults.standard.set(bestSlowCombo, forKey: "slowCombo")
+            }
+            if(comboMult >= bestComboMult){
+                bestComboMult = comboMult
+                UserDefaults.standard.set(bestComboMult, forKey: "comboMult")
+            }
+            comboNumLbl.isHidden = true
+            comboMultLbl.isHidden = true
+            comboMult = 1
+            fastCombo = 0
+            slowCombo = 0
+            fastActive = true
+            triggered = true
         }
     }
 }
