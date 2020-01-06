@@ -51,6 +51,7 @@ class GameScene: SKScene {
     var autoTime: Double = 0
     var tempTime: Double = 0
     var comboMult: Double = 1
+    var pointsEarned: Double = 0
     let safeArea = UIApplication.shared.windows[0].safeAreaInsets //gets safe area for each device
     //screen height and width
     var scrHeight: CGFloat = 0
@@ -260,31 +261,58 @@ class GameScene: SKScene {
             costumes = false
         }
     }
+    //makes faded text at the given location for the given text
+    func fadedText(tSpot: CGPoint, message: String){
+        earnedPointsLbl.position = tSpot
+        earnedPointsLbl.text = message
+        earnedPointsLbl.alpha = 1
+        let fadeAction = SKAction.fadeAlpha(to: 0, duration: 0.5)
+        let removeAction = SKAction.removeFromParent()
+        let textChange = SKAction.run {
+            textUp = !textUp
+        }
+        let fadeRemove = SKAction.sequence([textChange, fadeAction, removeAction, textChange])
+        if(textUp){
+            earnedPointsLbl.isPaused = true
+            earnedPointsLbl.removeAllActions()
+            earnedPointsLbl.removeFromParent()
+            earnedPointsLbl.isPaused = false
+            textUp = false
+        }
+        self.addChild(earnedPointsLbl)
+        earnedPointsLbl.run(fadeRemove)
+    }
+    //checks for records then resets combos
+    func recordCheck(){
+        if(fastCombo > bestFastCombo){
+            bestFastCombo = fastCombo
+            UserDefaults.standard.set(bestFastCombo, forKey: "fastCombo")
+        }
+        if(slowCombo > bestSlowCombo){
+            bestSlowCombo = slowCombo
+            UserDefaults.standard.set(bestSlowCombo, forKey: "slowCombo")
+        }
+        if(comboMult >= bestComboMult){
+            bestComboMult = comboMult
+            UserDefaults.standard.set(bestComboMult, forKey: "comboMult")
+        }
+        fastCombo = 0
+        slowCombo = 0
+        comboMult = 1
+        fastActive = true
+    }
     //Detects Tap (Beggining) TO ADD: check if touching "click Sprite"
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first!
-        let location = touch.location(in: self.view)
+        let location = touch.location(in: gameSC)
         if(!shopping && !record && !costumes){
-            let pointsEarned = pointMult * comboMult
-            if (clickSprite.contains(touch.location(in: self))) { //if clicksprite is clicked
+            pointsEarned = pointMult * comboMult
+            let ptString = Double(round(100 * pointsEarned) / 100)
+            if (clickSprite.contains(location)) { //if clicksprite is clicked
                 triggered = false
                 //adds points
                 points += pointsEarned
-                //fades point text
-                let ptString = Double(round(100 * pointsEarned) / 100)
-                earnedPointsLbl.position = clickSprite.position
-                earnedPointsLbl.text = "+\(ptString)"
-                earnedPointsLbl.alpha = 1
-                let fadeAction = SKAction.fadeAlpha(to: 0, duration: 0.5)
-                let removeAction = SKAction.removeFromParent()
-                let fadeRemove = SKAction.sequence([fadeAction, removeAction])
-                if(textUp){
-                    earnedPointsLbl.run(removeAction)
-                    textUp = false
-                }
-                textUp = true
-                self.addChild(earnedPointsLbl)
-                earnedPointsLbl.run(fadeRemove)
+                fadedText(tSpot: clickSprite.position, message: "+\(ptString)")
                 //checks combos
                 if(time < fastestTime){
                     fastestTime = time
@@ -314,70 +342,38 @@ class GameScene: SKScene {
                 time = 0
                 setPos()
             }
-            else if(shopBtn.contains(touch.location(in: self))){ //if shopping
+            else if(shopBtn.contains(location)){ //if shopping
                 setShop(open: true)
             }
-            else if(recordBtn.contains(touch.location(in: self))){ //if checking records
+            else if(recordBtn.contains(location)){ //if checking records
                 setRecords(set: true)
             }
             else{ //if sprite not touched
                 points += -pointsEarned
                 //fades point text
-                let ptString = Double(round(100 * pointsEarned) / 100)
-                earnedPointsLbl.position = location
-                earnedPointsLbl.text = "-\(ptString)"
-                earnedPointsLbl.alpha = 1
-                let fadeAction = SKAction.fadeAlpha(to: 0, duration: 0.5)
-                let removeAction = SKAction.removeFromParent()
-                let textTrue = SKAction.run {
-                    textUp = true
-                }
-                let textFalse = SKAction.run {
-                    textUp = false
-                }
-                let fadeRemove = SKAction.sequence([textTrue, fadeAction, removeAction, textFalse])
-                if(textUp){
-                    earnedPointsLbl.removeFromParent()
-                }
-                self.addChild(earnedPointsLbl)
-                earnedPointsLbl.run(fadeRemove)
+                fadedText(tSpot: location, message: "-\(ptString)")
                 //resets combo
                 comboNumLbl.isHidden = true
                 //checks for new records
-                if(fastCombo > bestFastCombo){
-                    bestFastCombo = fastCombo
-                    UserDefaults.standard.set(bestFastCombo, forKey: "fastCombo")
-                }
-                if(slowCombo > bestSlowCombo){
-                    bestSlowCombo = slowCombo
-                    UserDefaults.standard.set(bestSlowCombo, forKey: "slowCombo")
-                }
-                if(comboMult >= bestComboMult){
-                    bestComboMult = comboMult
-                    UserDefaults.standard.set(bestComboMult, forKey: "comboMult")
-                }
-                fastCombo = 0
-                slowCombo = 0
-                comboMult = 1
-                fastActive = true
+                recordCheck()
             }
         } else if(record){ //if checking records
-            if(recordBtn.contains(touch.location(in: self))){
+            if(recordBtn.contains(location)){
                 setRecords(set: false)
             } else {
                 print("Other Tap")
             }
         } else if(costumes){ //if buying/equipping costumes
-            if (opt3Box.contains(touch.location(in: self))){
+            if (opt3Box.contains(location)){
                 setCostumes(set: false)
             } else {
                 print("Other Tap")
             }
         } else { //if shopping
-            if (closeShop.contains(touch.location(in: self))){ //if stopping shopping
+            if (closeShop.contains(location)){ //if stopping shopping
                 setShop(open: false)
             }
-            else if (opt1Box.contains(touch.location(in: self))){ //first option
+            else if (opt1Box.contains(location)){ //first option
                 if(points >= 50){
                     points += -50
                     pointMult *= 1.05
@@ -385,7 +381,7 @@ class GameScene: SKScene {
                     gameVC.makeAlert(scene: gameSC, message: "Not enough points")
                 }
             }
-            else if (opt2Box.contains(touch.location(in: self))){ //second option
+            else if (opt2Box.contains(location)){ //second option
                 if(points >= 50){
                     points += -50
                     autoPts += 0.1
@@ -393,10 +389,10 @@ class GameScene: SKScene {
                     gameVC.makeAlert(scene: gameSC, message: "Not enough points")
                 }
             }
-            else if (opt3Box.contains(touch.location(in: self))){ //third option
+            else if (opt3Box.contains(location)){ //third option
                 setCostumes(set: true)
             }
-            else if (opt4Box.contains(touch.location(in: self))){ //fourth option
+            else if (opt4Box.contains(location)){ //fourth option
                 music = !music
                 opt4Lbl.text = "Music: OFF"
                 if(music){
@@ -429,24 +425,7 @@ class GameScene: SKScene {
         }
         if(!triggered && !shopping && !record && !costumes && time >= 1){
             //checks for new records
-            if(fastCombo > bestFastCombo){
-                bestFastCombo = fastCombo
-                UserDefaults.standard.set(bestFastCombo, forKey: "fastCombo")
-            }
-            if(slowCombo > bestSlowCombo){
-                bestSlowCombo = slowCombo
-                UserDefaults.standard.set(bestSlowCombo, forKey: "slowCombo")
-            }
-            if(comboMult >= bestComboMult){
-                bestComboMult = comboMult
-                UserDefaults.standard.set(bestComboMult, forKey: "comboMult")
-            }
-            comboNumLbl.isHidden = true
-            comboMultLbl.isHidden = true
-            comboMult = 1
-            fastCombo = 0
-            slowCombo = 0
-            fastActive = true
+            recordCheck()
             triggered = true
         }
     }
