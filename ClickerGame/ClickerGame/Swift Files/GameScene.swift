@@ -22,6 +22,7 @@ var bestSlowCombo: Int = 0
 var bestFastCombo: Int = 0
 var bestComboMult: Double = 1
 var shopping = false
+var costumes = false
 var record = false
 var fastActive = true // fast combo active
 var music = false
@@ -44,6 +45,7 @@ class GameScene: SKScene {
     var opt4Lbl = SKLabelNode()
     var comboNumLbl = SKLabelNode()
     var comboMultLbl = SKLabelNode()
+    var earnedPointsLbl = SKLabelNode()
     var time: Double = 0
     var autoTime: Double = 0
     var tempTime: Double = 0
@@ -142,7 +144,7 @@ class GameScene: SKScene {
         opt2Box.zPosition = 8
         opt2Lbl.position = CGPoint(x: opt2Box.position.x ,y: opt2Box.position.y - (opt2Lbl.frame.height / 2))
         //third option
-        opt3Lbl = SKLabelNode(text: "Remove ADs")
+        opt3Lbl = SKLabelNode(text: "Buy / Equip Costumes")
         opt3Lbl.fontColor = UIColor(ciColor: .black)
         opt3Lbl.fontName = pointsLbl.fontName
         opt3Lbl.zPosition = 9
@@ -150,6 +152,7 @@ class GameScene: SKScene {
         opt3Box.position = CGPoint(x: 0, y: opt2Box.position.y + (scrDiv / 2))
         opt3Box.zPosition = 8
         opt3Lbl.position = CGPoint(x: opt3Box.position.x ,y: opt3Box.position.y - (opt3Lbl.frame.height / 2))
+        //combo labels setup
         comboNumLbl = SKLabelNode(text: "Combo: 0")
         comboNumLbl.fontColor = pointsLbl.fontColor
         comboNumLbl.fontSize = pointsLbl.fontSize - 10
@@ -159,12 +162,19 @@ class GameScene: SKScene {
         comboNumLbl.isHidden = true
         comboMultLbl = SKLabelNode(text: "\(comboMult)x")
         comboMultLbl.fontColor = pointsLbl.fontColor
-        comboMultLbl.fontSize = comboMultLbl.fontSize - 5
+        comboMultLbl.fontSize = comboNumLbl.fontSize - 10
         comboMultLbl.fontName = pointsLbl.fontName
         comboMultLbl.position = CGPoint(x: comboNumLbl.position.x ,y: comboNumLbl.position.y - (comboNumLbl.frame.height / 2) - (comboMultLbl.frame.height / 2))
         comboMultLbl.zPosition = 7
         comboMultLbl.isHidden = true
         comboNumLbl.isHidden = true
+        //earned point setup
+        earnedPointsLbl = SKLabelNode(text: "Point")
+        earnedPointsLbl.fontColor = comboMultLbl.fontColor
+        earnedPointsLbl.fontName = comboMultLbl.fontName
+        earnedPointsLbl.fontSize = comboMultLbl.fontSize
+        earnedPointsLbl.position = CGPoint(x: 0, y: 0)
+        earnedPointsLbl.zPosition = 6
         self.addChild(comboNumLbl)
         self.addChild(comboMultLbl)
         if(music){ //changes text if music is on
@@ -186,7 +196,7 @@ class GameScene: SKScene {
         if(open){
             tempTime = time //saves time when buttonw as clicked
             shopLbl.text = "Shop"
-            opt3Lbl.text = "Remove ADs"
+            opt3Lbl.text = "Buy / Equip Costumes"
             opt2Lbl.text = "Upgrade Auto-Clicker"
             opt1Lbl.text = "Upgrade Click Worth"
             self.addChild(bckgBox)
@@ -203,6 +213,7 @@ class GameScene: SKScene {
             shopBtn.isHidden = true
             closeShop.isHidden = false
             shopping = true
+            print(time)
         } else { //if closed
             time = tempTime
             bckgBox.parent?.removeChildren(in: [bckgBox, shopLbl, opt1Box, opt1Lbl, opt2Box, opt2Lbl, opt3Box, opt3Lbl, opt4Box, opt4Lbl])
@@ -210,6 +221,7 @@ class GameScene: SKScene {
             shopBtn.isHidden = false
             closeShop.isHidden = true
             shopping = false
+            print(time)
         }
     }
     func setRecords(set: Bool){
@@ -228,23 +240,47 @@ class GameScene: SKScene {
             self.addChild(opt2Lbl)
             self.addChild(opt3Lbl)
             self.addChild(opt4Lbl)
-            record = true
             recordBtn.color = UIColor(ciColor: .magenta)
+            record = true
         } else { //if closing records
-            time = tempTime
+            time = tempTime - 0.2
             bckgBox.parent?.removeChildren(in: [bckgBox, shopLbl, opt1Lbl, opt2Lbl, opt3Lbl, opt4Lbl])
-            record = false
             recordBtn.color = UIColor(ciColor: .yellow)
+            record = false
+        }
+    }
+    //Cosumte Shop / Equp Setup Function
+    func setCostumes(set: Bool){
+        if(set){
+            shopLbl.text = "Costumes"
+            costumes = true
+        } else {
+            shopLbl.text = "Shop"
+            costumes = false
         }
     }
     //Detects Tap (Beggining) TO ADD: check if touching "click Sprite"
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first!
         let location = touch.location(in: self.view)
-        if(!shopping && !record){
+        if(!shopping && !record && !costumes){
+            let pointsEarned = pointMult * comboMult
             if (clickSprite.contains(touch.location(in: self))) { //if clicksprite is clicked
                 triggered = false
-                points += pointMult * comboMult
+                //adds points
+                points += pointsEarned
+                //fades point text
+                let ptLbl: SKLabelNode = earnedPointsLbl
+                let ptString = Double(round(100 * pointsEarned) / 100)
+                ptLbl.position = clickSprite.position
+                ptLbl.text = "+\(ptString)"
+                ptLbl.alpha = 1
+                let fadeAction = SKAction.fadeAlpha(to: 0, duration: 0.5)
+                let removeAction = SKAction.removeFromParent()
+                let fadeRemove = SKAction.sequence([fadeAction, removeAction])
+                self.addChild(ptLbl)
+                ptLbl.run(fadeRemove)
+                //checks combos
                 if(time < fastestTime){
                     fastestTime = time
                     UserDefaults.standard.set(fastestTime, forKey: "fastTM")
@@ -280,9 +316,18 @@ class GameScene: SKScene {
                 setRecords(set: true)
             }
             else{ //if sprite not touched
-                points += -pointMult * comboMult
-                print("Locatin: \(location) , Sprite Location: \(clickSprite.position), Points: \(points)")
-                pointsLbl.text = "Points: \(points)"
+                points += -pointsEarned
+                //fades point text
+                let ptLbl: SKLabelNode = earnedPointsLbl
+                let ptString = Double(round(100 * pointsEarned) / 100)
+                ptLbl.position = location
+                ptLbl.text = "-\(ptString)"
+                ptLbl.alpha = 1
+                let fadeAction = SKAction.fadeAlpha(to: 0, duration: 0.5)
+                let removeAction = SKAction.removeFromParent()
+                let fadeRemove = SKAction.sequence([fadeAction, removeAction])
+                self.addChild(ptLbl)
+                ptLbl.run(fadeRemove)
                 //resets combo
                 comboNumLbl.isHidden = true
                 //checks for new records
@@ -309,6 +354,12 @@ class GameScene: SKScene {
             } else {
                 print("Other Tap")
             }
+        } else if(costumes){ //if buying/equipping costumes
+            if (opt3Box.contains(touch.location(in: self))){
+                setCostumes(set: false)
+            } else {
+                print("Other Tap")
+            }
         } else { //if shopping
             if (closeShop.contains(touch.location(in: self))){ //if stopping shopping
                 setShop(open: false)
@@ -330,7 +381,7 @@ class GameScene: SKScene {
                 }
             }
             else if (opt3Box.contains(touch.location(in: self))){ //third option
-                opt3Lbl.text = "ADs Removed"
+                setCostumes(set: true)
             }
             else if (opt4Box.contains(touch.location(in: self))){ //fourth option
                 music = !music
@@ -363,7 +414,7 @@ class GameScene: SKScene {
             pointsLbl.text = "Points: \(ptString)" //changes it to 2 decimals
             UserDefaults.standard.set(points, forKey: "points")
         }
-        if(!triggered && time >= 1){
+        if(!triggered && !shopping && !record && !costumes && time >= 1){
             //checks for new records
             if(fastCombo > bestFastCombo){
                 bestFastCombo = fastCombo
