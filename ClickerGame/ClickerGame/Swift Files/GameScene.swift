@@ -25,6 +25,7 @@ var shopping = false
 var costumes = false
 var record = false
 var fastActive = true // fast combo active
+var textUp = false
 var music = false
 class GameScene: SKScene {
     //MARK - Variables
@@ -270,16 +271,20 @@ class GameScene: SKScene {
                 //adds points
                 points += pointsEarned
                 //fades point text
-                let ptLbl: SKLabelNode = earnedPointsLbl
                 let ptString = Double(round(100 * pointsEarned) / 100)
-                ptLbl.position = clickSprite.position
-                ptLbl.text = "+\(ptString)"
-                ptLbl.alpha = 1
+                earnedPointsLbl.position = clickSprite.position
+                earnedPointsLbl.text = "+\(ptString)"
+                earnedPointsLbl.alpha = 1
                 let fadeAction = SKAction.fadeAlpha(to: 0, duration: 0.5)
                 let removeAction = SKAction.removeFromParent()
                 let fadeRemove = SKAction.sequence([fadeAction, removeAction])
-                self.addChild(ptLbl)
-                ptLbl.run(fadeRemove)
+                if(textUp){
+                    earnedPointsLbl.run(removeAction)
+                    textUp = false
+                }
+                textUp = true
+                self.addChild(earnedPointsLbl)
+                earnedPointsLbl.run(fadeRemove)
                 //checks combos
                 if(time < fastestTime){
                     fastestTime = time
@@ -318,16 +323,24 @@ class GameScene: SKScene {
             else{ //if sprite not touched
                 points += -pointsEarned
                 //fades point text
-                let ptLbl: SKLabelNode = earnedPointsLbl
                 let ptString = Double(round(100 * pointsEarned) / 100)
-                ptLbl.position = location
-                ptLbl.text = "-\(ptString)"
-                ptLbl.alpha = 1
+                earnedPointsLbl.position = location
+                earnedPointsLbl.text = "-\(ptString)"
+                earnedPointsLbl.alpha = 1
                 let fadeAction = SKAction.fadeAlpha(to: 0, duration: 0.5)
                 let removeAction = SKAction.removeFromParent()
-                let fadeRemove = SKAction.sequence([fadeAction, removeAction])
-                self.addChild(ptLbl)
-                ptLbl.run(fadeRemove)
+                let textTrue = SKAction.run {
+                    textUp = true
+                }
+                let textFalse = SKAction.run {
+                    textUp = false
+                }
+                let fadeRemove = SKAction.sequence([textTrue, fadeAction, removeAction, textFalse])
+                if(textUp){
+                    earnedPointsLbl.removeFromParent()
+                }
+                self.addChild(earnedPointsLbl)
+                earnedPointsLbl.run(fadeRemove)
                 //resets combo
                 comboNumLbl.isHidden = true
                 //checks for new records
