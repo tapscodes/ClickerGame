@@ -4,8 +4,9 @@ A game idea that I came up with where a user gets points for clicking an object 
 - Actual Sprite (Debatable)
 - GameCenter support?
 - Better Shop
+- Actual Costume Shop
 - (Real) App Icon
 ## Current Bugs
-- None
+- The "Point" Label causes the game to crash if tapped too fast because it is still finishing its last action.
 ## Official Release Date
 Whenever its finished and hopefully on the appstore.
