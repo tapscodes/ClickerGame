@@ -24,6 +24,7 @@ var shopping = false
 var costumes = false
 var record = false
 var options = false
+var credits = false
 var menu = false
 //other bools
 var fastActive = true // fast combo active
@@ -88,7 +89,7 @@ class GameScene: SKScene {
         clickSprite.zPosition = 5
         //shop button
         menuBtn = self.childNode(withName: "menuBtn") as! SKSpriteNode
-        menuBtn.size = CGSize(width: scrWidth * 2, height: 100)
+        menuBtn.size = CGSize(width: scrWidth * 1.5, height: 100)
         menuBtn.color = UIColor(ciColor: .blue)
         menuBtn.position = CGPoint(x: 0, y: -scrHeight + safeArea.bottom + 50)
         menuBtn.zPosition = 1
@@ -241,12 +242,30 @@ class GameScene: SKScene {
             costumes = false
         }
     }
+    //sets up credits
+    func setCredits(set: Bool){
+        if(set){ //if checking records
+            menuLbl.text = "Credits"
+            opt3Lbl.text = "Code + Music: Tristan P.-S."
+            opt2Lbl.text = "Math: John Crane"
+            opt4Lbl.text = "Close Records"
+            opt1Lbl.text = "Sprites: Daniel Sierra"
+            bckgBox.parent?.removeChildren(in: [opt1Box, opt2Box, opt3Box])
+            credits = true
+        } else { //if closing records
+            self.addChild(opt1Box)
+            self.addChild(opt2Box)
+            self.addChild(opt3Box)
+            setOptions(set: true)
+            credits = false
+        }
+    }
     //sets up options
     func setOptions(set: Bool){
         if(set){
             menuLbl.text = "Options"
             opt4Lbl.text = "Close Options"
-            opt3Lbl.text = "Option 1 = ???"
+            opt3Lbl.text = "Credits"
             opt2Lbl.text = "Animations: OFF"
             if(animations){
             opt2Lbl.text = "Animations: ON"
@@ -452,12 +471,25 @@ class GameScene: SKScene {
                 }
             }
             else if (opt3Box.contains(location)){ //top option
-                print("top option")
+                setOptions(set: false)
+                setCredits(set: true)
             }
             else if (opt4Box.contains(location)){ //bottom option
                 setOptions(set: false)
             }
             else if(menuBtn.contains(location)){
+                setOptions(set: false)
+                setMenu(set: false)
+            }
+            else{
+                print("Other Tap")
+            }
+        } else if(credits) {
+            if (opt4Box.contains(location)){ //bottom option
+                setCredits(set: false)
+            }
+            else if(menuBtn.contains(location)){
+                setCredits(set: false)
                 setOptions(set: false)
                 setMenu(set: false)
             }
