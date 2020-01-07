@@ -29,6 +29,7 @@ var menu = false
 var fastActive = true // fast combo active
 var textUp = false
 var music = false
+var animations = true
 class GameScene: SKScene {
     //MARK - Variables
     var pointsLbl = SKLabelNode()
@@ -71,6 +72,7 @@ class GameScene: SKScene {
             fastestTime = UserDefaults.standard.double(forKey: "fastTM")
             bestComboMult = UserDefaults.standard.double(forKey: "comboMult")
             music = UserDefaults.standard.bool(forKey: "music")
+            animations = UserDefaults.standard.bool(forKey: "animations")
             bestCombo = UserDefaults.standard.integer(forKey: "tapCombo")
         }
         //points label at top of screen
@@ -183,7 +185,7 @@ class GameScene: SKScene {
     func setShop(set: Bool){
         if(set){
             menuLbl.text = "Shop"
-            opt3Lbl.text = "Upgrade Option 1"
+            opt3Lbl.text = "Unlock Next Costume"
             opt2Lbl.text = "Upgrade Auto-Clicker"
             opt1Lbl.text = "Upgrade Click Worth"
             opt4Lbl.text = "Close Shop"
@@ -197,6 +199,7 @@ class GameScene: SKScene {
             shopping = false
         }
     }
+    //sets up records
     func setRecords(set: Bool){
         if(set){ //if checking records
             menuLbl.text = "Records"
@@ -220,13 +223,13 @@ class GameScene: SKScene {
             record = false
         }
     }
-    //Cosumte Shop / Equp Setup Function
+    //sets up costumes
     func setCostumes(set: Bool){
         if(set){
             menuLbl.text = "Costumes"
-            opt3Lbl.text = "Top Costume"
-            opt2Lbl.text = "Second Costume"
-            opt1Lbl.text = "Third Costume"
+            opt3Lbl.text = "Equip Costume 1"
+            opt2Lbl.text = "Equip Costume 2"
+            opt1Lbl.text = "Equip Costume 3"
             opt4Lbl.text = "Close Costumes"
             costumes = true
         } else {
@@ -238,12 +241,16 @@ class GameScene: SKScene {
             costumes = false
         }
     }
+    //sets up options
     func setOptions(set: Bool){
         if(set){
             menuLbl.text = "Options"
             opt4Lbl.text = "Close Options"
-            opt3Lbl.text = "Option 1"
-            opt2Lbl.text = "Option 2"
+            opt3Lbl.text = "Option 1 = ???"
+            opt2Lbl.text = "Animations: OFF"
+            if(animations){
+            opt2Lbl.text = "Animations: ON"
+            }
             opt1Lbl.text = "Music: OFF"
             options = true
         } else {
@@ -286,6 +293,7 @@ class GameScene: SKScene {
     }
     //makes faded text at the given location for the given text
     func fadedText(tSpot: CGPoint, message: String){
+        if(animations){ //only toggles if animations are on
         earnedPointsLbl.position = tSpot
         earnedPointsLbl.text = message
         earnedPointsLbl.alpha = 1
@@ -304,6 +312,7 @@ class GameScene: SKScene {
         }
         self.addChild(earnedPointsLbl)
         earnedPointsLbl.run(fadeRemove)
+        }
     }
     //checks for records then resets combos
     func recordCheck(){
@@ -434,7 +443,13 @@ class GameScene: SKScene {
                 gameVC.playSong(song: "bckgLoop")
             }
             else if (opt2Box.contains(location)){ //second option
-                print("second option")
+                if(animations){
+                    opt2Lbl.text = "Animations: OFF"
+                    animations = false
+                } else {
+                    opt2Lbl.text = "Animations: ON"
+                    animations = true
+                }
             }
             else if (opt3Box.contains(location)){ //top option
                 print("top option")
@@ -470,6 +485,7 @@ class GameScene: SKScene {
             }
         }
         UserDefaults.standard.set(music, forKey: "music")
+        UserDefaults.standard.set(animations, forKey: "animations")
         UserDefaults.standard.set(pointMult, forKey: "ptMult")
         UserDefaults.standard.set(autoPts, forKey: "autoPts")
         UserDefaults.standard.set(points, forKey: "points")
