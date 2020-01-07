@@ -196,7 +196,10 @@ class GameScene: SKScene {
         let xPos: CGFloat = CGFloat.random(in: -scrWidth + 50...scrWidth - 50)
         let yPos: CGFloat = CGFloat.random(in: -scrHeight + 50 + safeArea.bottom + menuBtn.size.height...scrHeight - 50 - safeArea.top - pointsLbl.frame.height - comboNumLbl.frame.height - comboMultLbl.frame.height)
         clickSprite.position = CGPoint(x: xPos, y: yPos)
-        clickSprite.run(SKAction.animate(with: turtleSprites, timePerFrame: 0.01))
+        clickSprite.isPaused = true
+        clickSprite.removeAllActions()
+        clickSprite.isPaused = false
+        clickSprite.run(SKAction.animate(with: turtleSprites, timePerFrame: 0.05))
     }
     //sets up shop
     func setShop(set: Bool){
