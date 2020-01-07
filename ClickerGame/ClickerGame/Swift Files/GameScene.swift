@@ -432,15 +432,28 @@ class GameScene: SKScene {
                 print("Other Tap")
             }
         } else if(shopping){
-            //gameVC.makeAlert(scene: gameSC, message: "Not enough points")
-            if (opt1Box.contains(location)){ //third Option
-                print("third option")
+            if (opt1Box.contains(location)){ //third Option <- Clicker Multiplier
+                if(points >= 50){
+                    points += -50
+                    pointMult += 0.1
+                } else {
+                   gameVC.makeAlert(scene: gameSC, message: "Not enough points (Need 50)")
+                }
             }
-            else if (opt2Box.contains(location)){ //second option
-                print("second option")
+            else if (opt2Box.contains(location)){ //second option <- Auto Clicker
+                if(points >= 50){
+                    points += -50
+                    autoPts += 0.05
+                } else {
+                   gameVC.makeAlert(scene: gameSC, message: "Not enough points (Need 50)")
+                }
             }
-            else if (opt3Box.contains(location)){ //top option
-                print("top option")
+            else if (opt3Box.contains(location)){ //top option <- Costume
+                if(points >= 50){
+                    points += -50
+                } else {
+                   gameVC.makeAlert(scene: gameSC, message: "Not enough points (Need 50)")
+                }
             }
             else if (opt4Box.contains(location)){ //bottom option
                 setShop(set: false)
