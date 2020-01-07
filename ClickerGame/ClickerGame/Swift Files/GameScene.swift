@@ -15,15 +15,17 @@ var gameSC: SKScene = SKScene()
 var points: Double = 0 //points the person has
 var pointMult: Double = 1 //points multiplyer
 var autoPts: Double = 0
-var slowCombo: Int = 0
-var fastCombo: Int = 0
+var tapCombo: Int = 0
 var fastestTime: Double = 100
-var bestSlowCombo: Int = 0
-var bestFastCombo: Int = 0
+var bestCombo: Int = 0
 var bestComboMult: Double = 1
+//menu bools
 var shopping = false
 var costumes = false
 var record = false
+var options = false
+var menu = false
+//other bools
 var fastActive = true // fast combo active
 var textUp = false
 var music = false
@@ -31,11 +33,9 @@ class GameScene: SKScene {
     //MARK - Variables
     var pointsLbl = SKLabelNode()
     var clickSprite = SKSpriteNode()
-    var shopBtn = SKSpriteNode()
-    var closeShop = SKSpriteNode()
-    var recordBtn = SKSpriteNode()
+    var menuBtn = SKSpriteNode()
     var bckgBox = SKSpriteNode()
-    var shopLbl = SKLabelNode()
+    var menuLbl = SKLabelNode()
     var opt1Box = SKSpriteNode()
     var opt1Lbl = SKLabelNode()
     var opt2Box = SKSpriteNode()
@@ -71,8 +71,7 @@ class GameScene: SKScene {
             fastestTime = UserDefaults.standard.double(forKey: "fastTM")
             bestComboMult = UserDefaults.standard.double(forKey: "comboMult")
             music = UserDefaults.standard.bool(forKey: "music")
-            bestSlowCombo = UserDefaults.standard.integer(forKey: "slowCombo")
-            bestFastCombo = UserDefaults.standard.integer(forKey: "fastCombo")
+            bestCombo = UserDefaults.standard.integer(forKey: "tapCombo")
         }
         //points label at top of screen
         pointsLbl = self.childNode(withName: "pointsLbl") as! SKLabelNode
@@ -86,43 +85,30 @@ class GameScene: SKScene {
         clickSprite.size = CGSize(width: 100, height: 100)
         clickSprite.zPosition = 5
         //shop button
-        shopBtn = self.childNode(withName: "shopBtn") as! SKSpriteNode
-        shopBtn.size = CGSize(width: scrWidth, height: 100)
-        shopBtn.color = UIColor(ciColor: .blue)
-        shopBtn.position = CGPoint(x: -(scrWidth / 2), y: -scrHeight + safeArea.bottom + 50)
-        shopBtn.zPosition = 1
-        //close shop button
-        closeShop = self.childNode(withName: "closeShop") as! SKSpriteNode
-        closeShop.size = shopBtn.size
-        closeShop.isHidden = true
-        closeShop.color = UIColor(ciColor: .green)
-        closeShop.position = shopBtn.position
-        closeShop.zPosition = shopBtn.zPosition
-        //records button
-        recordBtn = SKSpriteNode(color: UIColor(ciColor: .yellow), size: shopBtn.size)
-        recordBtn.position = CGPoint(x: -shopBtn.position.x, y: shopBtn.position.y)
-        recordBtn.zPosition = shopBtn.zPosition
-        recordBtn.isHidden = false
-        self.addChild(recordBtn)
+        menuBtn = self.childNode(withName: "menuBtn") as! SKSpriteNode
+        menuBtn.size = CGSize(width: scrWidth * 2, height: 100)
+        menuBtn.color = UIColor(ciColor: .blue)
+        menuBtn.position = CGPoint(x: 0, y: -scrHeight + safeArea.bottom + 50)
+        menuBtn.zPosition = 1
         //shop background
         bckgBox = SKSpriteNode(color: UIColor(ciColor: .white), size: CGSize(width: (scrWidth * 1.5) - safeArea.left - safeArea.right, height: (scrHeight * 1.5) - safeArea.top - safeArea.bottom))
         bckgBox.position = CGPoint(x: 0, y: 0)
         bckgBox.zPosition = 6
         //shop label
-        shopLbl = SKLabelNode(text: "SHOP")
-        shopLbl.fontColor = UIColor(ciColor: .black)
-        shopLbl.fontName = pointsLbl.fontName
-        shopLbl.fontSize = 100
-        shopLbl.position = CGPoint(x: 0, y: (bckgBox.size.height / 2) - shopLbl.frame.height)
-        shopLbl.zPosition = 7
-        let scrDiv = (bckgBox.size.height - (shopLbl.frame.height * 2)) / 2
+        menuLbl = SKLabelNode(text: "SHOP")
+        menuLbl.fontColor = UIColor(ciColor: .black)
+        menuLbl.fontName = pointsLbl.fontName
+        menuLbl.fontSize = 100
+        menuLbl.position = CGPoint(x: 0, y: (bckgBox.size.height / 2) - menuLbl.frame.height)
+        menuLbl.zPosition = 7
+        let scrDiv = (bckgBox.size.height - (menuLbl.frame.height * 2)) / 2
         //fourth (next set) of options
         opt4Lbl = SKLabelNode(text: "Music: OFF")
         opt4Lbl.fontColor = UIColor(ciColor: .black)
         opt4Lbl.fontName = pointsLbl.fontName
         opt4Lbl.zPosition = 9
         opt4Box = SKSpriteNode(color: UIColor(ciColor: .red), size: CGSize(width: bckgBox.size.width / 1.5, height: 100))
-        let b4Y = -(scrDiv) + (opt4Box.size.height / 2) + (shopLbl.frame.height / 2)
+        let b4Y = -(scrDiv) + (opt4Box.size.height / 2) + (menuLbl.frame.height / 2)
         print(scrDiv)
         opt4Box.position = CGPoint(x: 0, y: b4Y)
         opt4Box.zPosition = 8
@@ -190,19 +176,95 @@ class GameScene: SKScene {
         //print("Screen Size: \(UIScreen.main.bounds.width) , \(UIScreen.main.bounds.height) \n Scene Size: \(scrWidth) , \(scrHeight)")
         //^ Prints screen size VS scene size, used to bugs
         let xPos: CGFloat = CGFloat.random(in: -scrWidth + 50...scrWidth - 50)
-        let yPos: CGFloat = CGFloat.random(in: -scrHeight + 50 + safeArea.bottom + shopBtn.size.height...scrHeight - 50 - safeArea.top - pointsLbl.frame.height - comboNumLbl.frame.height - comboMultLbl.frame.height)
+        let yPos: CGFloat = CGFloat.random(in: -scrHeight + 50 + safeArea.bottom + menuBtn.size.height...scrHeight - 50 - safeArea.top - pointsLbl.frame.height - comboNumLbl.frame.height - comboMultLbl.frame.height)
         clickSprite.position = CGPoint(x: xPos, y: yPos)
     }
     //sets up shop
-    func setShop(open: Bool){
-        if(open){
-            tempTime = time //saves time when buttonw as clicked
-            shopLbl.text = "Shop"
-            opt3Lbl.text = "Buy / Equip Costumes"
+    func setShop(set: Bool){
+        if(set){
+            menuLbl.text = "Shop"
+            opt3Lbl.text = "Upgrade Option 1"
             opt2Lbl.text = "Upgrade Auto-Clicker"
             opt1Lbl.text = "Upgrade Click Worth"
+            opt4Lbl.text = "Close Shop"
+            shopping = true
+        } else { //if closed
+            menuLbl.text = "Menu"
+            opt4Lbl.text = "Options"
+            opt3Lbl.text = "Upgrades"
+            opt2Lbl.text = "Costumes"
+            opt1Lbl.text = "Records"
+            shopping = false
+        }
+    }
+    func setRecords(set: Bool){
+        if(set){ //if checking records
+            menuLbl.text = "Records"
+            let fastString = Double(round(100 * fastestTime) / 100)
+            opt3Lbl.text = "Fastest Click: \(fastString)"
+            opt2Lbl.text = "Best Combo: \(bestCombo)"
+            opt4Lbl.text = "Close Records"
+            let bestCombo = Double(round(100 * bestComboMult) / 100)
+            opt1Lbl.text = "Largest Combo Multiplier: \(bestCombo)"
+            bckgBox.parent?.removeChildren(in: [opt1Box, opt2Box, opt3Box])
+            record = true
+        } else { //if closing records
+            menuLbl.text = "Menu"
+            opt4Lbl.text = "Options"
+            opt3Lbl.text = "Upgrades"
+            opt2Lbl.text = "Costumes"
+            opt1Lbl.text = "Records"
+            self.addChild(opt1Box)
+            self.addChild(opt2Box)
+            self.addChild(opt3Box)
+            record = false
+        }
+    }
+    //Cosumte Shop / Equp Setup Function
+    func setCostumes(set: Bool){
+        if(set){
+            menuLbl.text = "Costumes"
+            opt3Lbl.text = "Top Costume"
+            opt2Lbl.text = "Second Costume"
+            opt1Lbl.text = "Third Costume"
+            opt4Lbl.text = "Close Costumes"
+            costumes = true
+        } else {
+            menuLbl.text = "Menu"
+            opt4Lbl.text = "Options"
+            opt3Lbl.text = "Upgrades"
+            opt2Lbl.text = "Costumes"
+            opt1Lbl.text = "Records"
+            costumes = false
+        }
+    }
+    func setOptions(set: Bool){
+        if(set){
+            menuLbl.text = "Options"
+            opt4Lbl.text = "Close Options"
+            opt3Lbl.text = "Option 1"
+            opt2Lbl.text = "Option 2"
+            opt1Lbl.text = "Music: OFF"
+            options = true
+        } else {
+            menuLbl.text = "Menu"
+            opt4Lbl.text = "Options"
+            opt3Lbl.text = "Upgrades"
+            opt2Lbl.text = "Costumes"
+            opt1Lbl.text = "Records"
+            options = false
+        }
+    }
+    func setMenu(set: Bool){
+        if(set){
+            tempTime = time //saves time when buttonw as clicked
+            menuLbl.text = "Menu"
+            opt4Lbl.text = "Options"
+            opt3Lbl.text = "Upgrades"
+            opt2Lbl.text = "Costumes"
+            opt1Lbl.text = "Records"
             self.addChild(bckgBox)
-            self.addChild(shopLbl)
+            self.addChild(menuLbl)
             self.addChild(opt1Box)
             self.addChild(opt1Lbl)
             self.addChild(opt2Box)
@@ -212,53 +274,11 @@ class GameScene: SKScene {
             self.addChild(opt4Box)
             self.addChild(opt4Lbl)
             clickSprite.isHidden = true
-            shopBtn.isHidden = true
-            closeShop.isHidden = false
-            shopping = true
-            print(time)
-        } else { //if closed
-            time = tempTime
-            bckgBox.parent?.removeChildren(in: [bckgBox, shopLbl, opt1Box, opt1Lbl, opt2Box, opt2Lbl, opt3Box, opt3Lbl, opt4Box, opt4Lbl])
-            clickSprite.isHidden = false
-            shopBtn.isHidden = false
-            closeShop.isHidden = true
-            shopping = false
-            print(time)
-        }
-    }
-    func setRecords(set: Bool){
-        if(set){ //if checking records
-            tempTime = time //saves time when buttonw as clicked
-            shopLbl.text = "Records"
-            opt3Lbl.text = "Best Fast Combo: \(bestFastCombo)"
-            opt2Lbl.text = "Best Combo: \(bestSlowCombo)"
-            let fastString = Double(round(100 * fastestTime) / 100)
-            opt4Lbl.text = "Fastest Click: \(fastString)"
-            let bestCombo = Double(round(100 * bestComboMult) / 100)
-            opt1Lbl.text = "Largest Combo Multiplier: \(bestCombo)"
-            self.addChild(bckgBox)
-            self.addChild(shopLbl)
-            self.addChild(opt1Lbl)
-            self.addChild(opt2Lbl)
-            self.addChild(opt3Lbl)
-            self.addChild(opt4Lbl)
-            recordBtn.color = UIColor(ciColor: .magenta)
-            record = true
-        } else { //if closing records
-            time = tempTime - 0.2
-            bckgBox.parent?.removeChildren(in: [bckgBox, shopLbl, opt1Lbl, opt2Lbl, opt3Lbl, opt4Lbl])
-            recordBtn.color = UIColor(ciColor: .yellow)
-            record = false
-        }
-    }
-    //Cosumte Shop / Equp Setup Function
-    func setCostumes(set: Bool){
-        if(set){
-            shopLbl.text = "Costumes"
-            costumes = true
+            menu = true
         } else {
-            shopLbl.text = "Shop"
-            costumes = false
+            bckgBox.parent?.removeChildren(in: [bckgBox, menuLbl, opt1Box, opt1Lbl, opt2Box, opt2Lbl, opt3Box, opt3Lbl, opt4Box, opt4Lbl])
+            clickSprite.isHidden = false
+            menu = false
         }
     }
     //makes faded text at the given location for the given text
@@ -284,20 +304,17 @@ class GameScene: SKScene {
     }
     //checks for records then resets combos
     func recordCheck(){
-        if(fastCombo > bestFastCombo){
-            bestFastCombo = fastCombo
-            UserDefaults.standard.set(bestFastCombo, forKey: "fastCombo")
-        }
-        if(slowCombo > bestSlowCombo){
-            bestSlowCombo = slowCombo
-            UserDefaults.standard.set(bestSlowCombo, forKey: "slowCombo")
+        comboNumLbl.isHidden = true
+        comboMultLbl.isHidden = true
+        if(tapCombo > bestCombo){
+            bestCombo = tapCombo
+            UserDefaults.standard.set(bestCombo, forKey: "tapCombo")
         }
         if(comboMult >= bestComboMult){
             bestComboMult = comboMult
             UserDefaults.standard.set(bestComboMult, forKey: "comboMult")
         }
-        fastCombo = 0
-        slowCombo = 0
+        tapCombo = 0
         comboMult = 1
         fastActive = true
     }
@@ -305,7 +322,7 @@ class GameScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first!
         let location = touch.location(in: gameSC)
-        if(!shopping && !record && !costumes){
+        if(!menu){
             pointsEarned = pointMult * comboMult
             let ptString = Double(round(100 * pointsEarned) / 100)
             if (clickSprite.contains(location)) { //if clicksprite is clicked
@@ -319,21 +336,20 @@ class GameScene: SKScene {
                     UserDefaults.standard.set(fastestTime, forKey: "fastTM")
                 }
                 if(fastActive && time < 0.5){ //on fast combo pace (top 50% of data)
-                    fastCombo += 1
-                    slowCombo += 1
+                    tapCombo += 1
                     comboMult += 0.05
                     comboNumLbl.isHidden = false
                     comboMultLbl.isHidden = false
-                    comboNumLbl.text = "(Fast) Combo: \(slowCombo)"
+                    comboNumLbl.text = "(Fast) Combo: \(tapCombo)"
                     let ptString = Double(round(100 * comboMult) / 100)
                     comboMultLbl.text = "\(ptString)x"
                 } else if (time < 1.0){ //on slow combo pace (top 50% of data)
                     fastActive = false
                     comboMult += 0.01
-                    slowCombo += 1
+                    tapCombo += 1
                     comboNumLbl.isHidden = false
                     comboMultLbl.isHidden = false
-                    comboNumLbl.text = "Combo: \(slowCombo)"
+                    comboNumLbl.text = "Combo: \(tapCombo)"
                     let ptString = Double(round(100 * comboMult) / 100)
                     comboMultLbl.text = "\(ptString)x"
                 } else { //combo dropped
@@ -342,63 +358,93 @@ class GameScene: SKScene {
                 time = 0
                 setPos()
             }
-            else if(shopBtn.contains(location)){ //if shopping
-                setShop(open: true)
-            }
-            else if(recordBtn.contains(location)){ //if checking records
-                setRecords(set: true)
+            else if(menuBtn.contains(location)){ //if opening menu
+                setMenu(set: true)
             }
             else{ //if sprite not touched
                 points += -pointsEarned
                 //fades point text
                 fadedText(tSpot: location, message: "-\(ptString)")
-                //resets combo
-                comboNumLbl.isHidden = true
-                //checks for new records
+                //checks for new records and resets
                 recordCheck()
             }
         } else if(record){ //if checking records
-            if(recordBtn.contains(location)){
+            if (opt4Box.contains(location)){ //bottom option
                 setRecords(set: false)
-            } else {
+            }
+            else{
                 print("Other Tap")
             }
         } else if(costumes){ //if buying/equipping costumes
-            if (opt3Box.contains(location)){
-                setCostumes(set: false)
-            } else {
-                print("Other Tap")
-            }
-        } else { //if shopping
-            if (closeShop.contains(location)){ //if stopping shopping
-                setShop(open: false)
-            }
-            else if (opt1Box.contains(location)){ //first option
-                if(points >= 50){
-                    points += -50
-                    pointMult *= 1.05
-                } else {
-                    gameVC.makeAlert(scene: gameSC, message: "Not enough points")
-                }
+            //gameVC.makeAlert(scene: gameSC, message: "Not enough points")
+            if (opt1Box.contains(location)){ //third Option
+                print("third option")
             }
             else if (opt2Box.contains(location)){ //second option
-                if(points >= 50){
-                    points += -50
-                    autoPts += 0.1
-                } else {
-                    gameVC.makeAlert(scene: gameSC, message: "Not enough points")
-                }
+                print("second option")
             }
-            else if (opt3Box.contains(location)){ //third option
-                setCostumes(set: true)
+            else if (opt3Box.contains(location)){ //top option
+                print("top option")
             }
-            else if (opt4Box.contains(location)){ //fourth option
+            else if (opt4Box.contains(location)){ //bottom option
+                setCostumes(set: false)
+            }
+            else{
+                print("Other Tap")
+            }
+        } else if(shopping){
+            //gameVC.makeAlert(scene: gameSC, message: "Not enough points")
+            if (opt1Box.contains(location)){ //third Option
+                print("third option")
+            }
+            else if (opt2Box.contains(location)){ //second option
+                print("second option")
+            }
+            else if (opt3Box.contains(location)){ //top option
+                print("top option")
+            }
+            else if (opt4Box.contains(location)){ //bottom option
+                setShop(set: false)
+            }
+            else{
+                print("Other Tap")
+            }
+        } else if(options){
+            if (opt1Box.contains(location)){ //third Option
                 music = !music
-                opt4Lbl.text = "Music: OFF"
+                opt1Lbl.text = "Music: OFF"
                 if(music){
-                    opt4Lbl.text = "Music: ON"
+                    opt1Lbl.text = "Music: ON"
                 }
                 gameVC.playSong(song: "bckgLoop")
+            }
+            else if (opt2Box.contains(location)){ //second option
+                print("second option")
+            }
+            else if (opt3Box.contains(location)){ //top option
+                print("top option")
+            }
+            else if (opt4Box.contains(location)){ //bottom option
+                setOptions(set: false)
+            }
+            else{
+                print("Other Tap")
+            }
+        } else { //if menu
+            if(menuBtn.contains(location)){
+                setMenu(set: false)
+            }
+            else if(opt4Box.contains(location)){//opening options
+                setOptions(set: true)
+            }
+            else if(opt3Box.contains(location)){//opening records
+                setShop(set: true)
+            }
+            else if(opt2Box.contains(location)){//opening shop
+                setCostumes(set: true)
+            }
+            else if(opt1Box.contains(location)){//opening costumes
+                setRecords(set: true)
             }
             else{
                 print("Other Tap")
