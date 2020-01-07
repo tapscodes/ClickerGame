@@ -274,10 +274,13 @@ class GameScene: SKScene {
             self.addChild(opt4Box)
             self.addChild(opt4Lbl)
             clickSprite.isHidden = true
+            menuBtn.color = UIColor(ciColor: .green)
             menu = true
         } else {
+            time = tempTime - 0.3
             bckgBox.parent?.removeChildren(in: [bckgBox, menuLbl, opt1Box, opt1Lbl, opt2Box, opt2Lbl, opt3Box, opt3Lbl, opt4Box, opt4Lbl])
             clickSprite.isHidden = false
+            menuBtn.color = UIColor(ciColor: .blue)
             menu = false
         }
     }
@@ -372,6 +375,10 @@ class GameScene: SKScene {
             if (opt4Box.contains(location)){ //bottom option
                 setRecords(set: false)
             }
+            else if(menuBtn.contains(location)){
+                setRecords(set: false)
+                setMenu(set: false)
+            }
             else{
                 print("Other Tap")
             }
@@ -389,6 +396,10 @@ class GameScene: SKScene {
             else if (opt4Box.contains(location)){ //bottom option
                 setCostumes(set: false)
             }
+            else if(menuBtn.contains(location)){
+                setCostumes(set: false)
+                setMenu(set: false)
+            }
             else{
                 print("Other Tap")
             }
@@ -405,6 +416,10 @@ class GameScene: SKScene {
             }
             else if (opt4Box.contains(location)){ //bottom option
                 setShop(set: false)
+            }
+            else if(menuBtn.contains(location)){
+                setShop(set: false)
+                setMenu(set: false)
             }
             else{
                 print("Other Tap")
@@ -426,6 +441,10 @@ class GameScene: SKScene {
             }
             else if (opt4Box.contains(location)){ //bottom option
                 setOptions(set: false)
+            }
+            else if(menuBtn.contains(location)){
+                setOptions(set: false)
+                setMenu(set: false)
             }
             else{
                 print("Other Tap")
@@ -469,7 +488,7 @@ class GameScene: SKScene {
             pointsLbl.text = "Points: \(ptString)" //changes it to 2 decimals
             UserDefaults.standard.set(points, forKey: "points")
         }
-        if(!triggered && !shopping && !record && !costumes && time >= 1){
+        if(!triggered && !menu && time >= 1){
             //checks for new records
             recordCheck()
             triggered = true
