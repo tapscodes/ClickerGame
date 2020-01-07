@@ -19,6 +19,7 @@ var tapCombo: Int = 0
 var fastestTime: Double = 100
 var bestCombo: Int = 0
 var bestComboMult: Double = 1
+var turtleSprites: [SKTexture] = []
 //menu bools
 var shopping = false
 var costumes = false
@@ -33,6 +34,7 @@ var music = false
 var animations = true
 class GameScene: SKScene {
     //MARK - Variables
+    var gameBckg = SKSpriteNode()
     var pointsLbl = SKLabelNode()
     var clickSprite = SKSpriteNode()
     var menuBtn = SKSpriteNode()
@@ -64,6 +66,7 @@ class GameScene: SKScene {
     override func didMove(to view: SKView) {
         gameSC = self
         gameSC.size = CGSize(width: UIScreen.main.bounds.size.width * 2, height: UIScreen.main.bounds.size.height * 2)
+        gameSC.scaleMode = .aspectFill
         scrHeight = self.size.height / 2
         scrWidth = self.size.width / 2
         if(UserDefaults.standard.double(forKey: "points") != 0){ //checks for first time load
@@ -76,27 +79,35 @@ class GameScene: SKScene {
             animations = UserDefaults.standard.bool(forKey: "animations")
             bestCombo = UserDefaults.standard.integer(forKey: "tapCombo")
         }
+        //sets up game background
+        gameBckg = SKSpriteNode(texture: SKTexture(image: UIImage(named: "beachBckg")!), color: UIColor(ciColor: .clear), size: gameSC.size)
+        gameBckg.zPosition = 1
+        gameBckg.position = CGPoint(x: 0,y: 0)
         //points label at top of screen
         pointsLbl = self.childNode(withName: "pointsLbl") as! SKLabelNode
         pointsLbl.position = CGPoint(x: 0, y: scrHeight - safeArea.top - pointsLbl.frame.height)
         let ptString = Double(round(100 * points) / 100)
         pointsLbl.text = "Points: \(ptString)"
-        pointsLbl.zPosition = 2
+        pointsLbl.fontColor = UIColor(ciColor: .black)
+        pointsLbl.zPosition = 3
         //sprite to be clicked
         clickSprite = self.childNode(withName: "clickSprite") as! SKSpriteNode
         clickSprite.isUserInteractionEnabled = false
-        clickSprite.size = CGSize(width: 100, height: 100)
+        clickSprite.size = CGSize(width: 150, height: 150)
         clickSprite.zPosition = 5
+        clickSprite.texture = SKTexture(image: UIImage(named: "heartTurtle")!)
         //shop button
         menuBtn = self.childNode(withName: "menuBtn") as! SKSpriteNode
         menuBtn.size = CGSize(width: scrWidth * 1.5, height: 100)
         menuBtn.color = UIColor(ciColor: .blue)
         menuBtn.position = CGPoint(x: 0, y: -scrHeight + safeArea.bottom + 50)
-        menuBtn.zPosition = 1
+        menuBtn.zPosition = 2
+        menuBtn.texture = SKTexture(image: UIImage(named: "menuBtn")!)
         //shop background
         bckgBox = SKSpriteNode(color: UIColor(ciColor: .white), size: CGSize(width: (scrWidth * 1.5) - safeArea.left - safeArea.right, height: (scrHeight * 1.5) - safeArea.top - safeArea.bottom))
         bckgBox.position = CGPoint(x: 0, y: 0)
         bckgBox.zPosition = 6
+        bckgBox.texture = SKTexture(image: UIImage(named: "menuBckg")!)
         //shop label
         menuLbl = SKLabelNode(text: "SHOP")
         menuLbl.fontColor = UIColor(ciColor: .black)
@@ -168,6 +179,10 @@ class GameScene: SKScene {
         earnedPointsLbl.zPosition = 6
         self.addChild(comboNumLbl)
         self.addChild(comboMultLbl)
+        self.addChild(gameBckg)
+        for i in 1...9 {
+            turtleSprites.append(SKTexture(image: UIImage(named: "turtleSprite\(i)")!))
+        }
         if(music){ //changes text if music is on
             opt4Lbl.text = "Music: ON"
         }
@@ -181,6 +196,7 @@ class GameScene: SKScene {
         let xPos: CGFloat = CGFloat.random(in: -scrWidth + 50...scrWidth - 50)
         let yPos: CGFloat = CGFloat.random(in: -scrHeight + 50 + safeArea.bottom + menuBtn.size.height...scrHeight - 50 - safeArea.top - pointsLbl.frame.height - comboNumLbl.frame.height - comboMultLbl.frame.height)
         clickSprite.position = CGPoint(x: xPos, y: yPos)
+        clickSprite.run(SKAction.animate(with: turtleSprites, timePerFrame: 0.01))
     }
     //sets up shop
     func setShop(set: Bool){
@@ -301,12 +317,14 @@ class GameScene: SKScene {
             self.addChild(opt4Lbl)
             clickSprite.isHidden = true
             menuBtn.color = UIColor(ciColor: .green)
+            menuBtn.texture = SKTexture(image: UIImage(named: "closeBtn")!)
             menu = true
         } else {
             time = tempTime - 0.3
             bckgBox.parent?.removeChildren(in: [bckgBox, menuLbl, opt1Box, opt1Lbl, opt2Box, opt2Lbl, opt3Box, opt3Lbl, opt4Box, opt4Lbl])
             clickSprite.isHidden = false
             menuBtn.color = UIColor(ciColor: .blue)
+            menuBtn.texture = SKTexture(image: UIImage(named: "menuBtn")!)
             menu = false
         }
     }
@@ -357,6 +375,8 @@ class GameScene: SKScene {
             pointsEarned = pointMult * comboMult
             let ptString = Double(round(100 * pointsEarned) / 100)
             if (clickSprite.contains(location)) { //if clicksprite is clicked
+                clickSprite.run(SKAction.animate(with: [SKTexture(image: UIImage(named: "heartTurtle")!)], timePerFrame: 0.1))
+                //need to figure out a way to display the "heartTurtle" sprite for a small time period
                 triggered = false
                 //adds points
                 points += pointsEarned
