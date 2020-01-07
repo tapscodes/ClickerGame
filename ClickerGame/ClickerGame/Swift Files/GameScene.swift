@@ -248,7 +248,7 @@ class GameScene: SKScene {
             menuLbl.text = "Credits"
             opt3Lbl.text = "Code + Music: Tristan P.-S."
             opt2Lbl.text = "Math: John Crane"
-            opt4Lbl.text = "Close Records"
+            opt4Lbl.text = "Close Credits"
             opt1Lbl.text = "Sprites: Daniel Sierra"
             bckgBox.parent?.removeChildren(in: [opt1Box, opt2Box, opt3Box])
             credits = true
