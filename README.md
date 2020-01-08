@@ -5,6 +5,7 @@ A game idea that I came up with where a user gets points for clicking an object 
 - Proper Math for Shop
 - GameCenter support?
 - Better game music loop?
+- Text Outline For Labels (+ New Font?)
 ## Current Bugs
 - Many Sprites Aren't Properly Sized
 - Music loops a tiny bit off
