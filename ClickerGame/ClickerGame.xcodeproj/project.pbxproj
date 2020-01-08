@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		02C5826423BF12DC00C6ECF4 /* bckgLoop.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 02C5826323BF12DC00C6ECF4 /* bckgLoop.mp3 */; };
+		02B6FB0323C62A800015B521 /* turtleTapperBckg.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 02B6FB0223C62A800015B521 /* turtleTapperBckg.mp3 */; };
 		02C8BB2223ABD46B003A5A67 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02C8BB2123ABD46B003A5A67 /* AppDelegate.swift */; };
 		02C8BB2423ABD46B003A5A67 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 02C8BB2323ABD46B003A5A67 /* GameScene.sks */; };
 		02C8BB2623ABD46B003A5A67 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 02C8BB2523ABD46B003A5A67 /* Actions.sks */; };
@@ -38,7 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		02C5826323BF12DC00C6ECF4 /* bckgLoop.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bckgLoop.mp3; sourceTree = "<group>"; };
+		02B6FB0223C62A800015B521 /* turtleTapperBckg.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = turtleTapperBckg.mp3; sourceTree = "<group>"; };
 		02C8BB1E23ABD46B003A5A67 /* ClickerGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClickerGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02C8BB2123ABD46B003A5A67 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		02C8BB2323ABD46B003A5A67 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -86,7 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				02C8BB2E23ABD46E003A5A67 /* Assets.xcassets */,
-				02C5826323BF12DC00C6ECF4 /* bckgLoop.mp3 */,
+				02B6FB0223C62A800015B521 /* turtleTapperBckg.mp3 */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -274,11 +274,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				02C8BB2D23ABD46B003A5A67 /* Main.storyboard in Resources */,
-				02C5826423BF12DC00C6ECF4 /* bckgLoop.mp3 in Resources */,
 				02C8BB2423ABD46B003A5A67 /* GameScene.sks in Resources */,
 				02C8BB2F23ABD46E003A5A67 /* Assets.xcassets in Resources */,
 				02C8BB3223ABD46E003A5A67 /* LaunchScreen.storyboard in Resources */,
 				02C8BB2623ABD46B003A5A67 /* Actions.sks in Resources */,
+				02B6FB0323C62A800015B521 /* turtleTapperBckg.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

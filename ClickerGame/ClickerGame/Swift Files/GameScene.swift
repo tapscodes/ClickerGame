@@ -186,7 +186,7 @@ class GameScene: SKScene {
         if(music){ //changes text if music is on
             opt4Lbl.text = "Music: ON"
         }
-        gameVC.playSong(song: "bckgLoop")
+        gameVC.playSong(song: "turtleTapperBckg")
         setPos()
     }
     //sets sprite position to random spot on screen (above and below other things on screen)
@@ -287,9 +287,12 @@ class GameScene: SKScene {
             opt3Lbl.text = "Credits"
             opt2Lbl.text = "Animations: OFF"
             if(animations){
-            opt2Lbl.text = "Animations: ON"
+                opt2Lbl.text = "Animations: ON"
             }
             opt1Lbl.text = "Music: OFF"
+            if(music){
+                opt1Lbl.text = "Music: ON"
+            }
             options = true
         } else {
             menuLbl.text = "Menu"
@@ -495,7 +498,7 @@ class GameScene: SKScene {
                 if(music){
                     opt1Lbl.text = "Music: ON"
                 }
-                gameVC.playSong(song: "bckgLoop")
+                gameVC.playSong(song: "turtleTapperBckg")
             }
             else if (opt2Box.contains(location)){ //second option
                 if(animations){
