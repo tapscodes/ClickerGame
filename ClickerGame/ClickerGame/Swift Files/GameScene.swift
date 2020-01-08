@@ -199,7 +199,7 @@ class GameScene: SKScene {
         clickSprite.isPaused = true
         clickSprite.removeAllActions()
         clickSprite.isPaused = false
-        clickSprite.run(SKAction.animate(with: turtleSprites, timePerFrame: 0.05))
+        clickSprite.run(SKAction.animate(with: turtleSprites, timePerFrame: 0.03))
     }
     //sets up shop
     func setShop(set: Bool){
@@ -326,7 +326,7 @@ class GameScene: SKScene {
             menuBtn.texture = SKTexture(image: UIImage(named: "closeBtn")!)
             menu = true
         } else {
-            time = tempTime - 0.3
+            time = tempTime - 0.1
             bckgBox.parent?.removeChildren(in: [bckgBox, menuLbl, opt1Box, opt1Lbl, opt2Box, opt2Lbl, opt3Box, opt3Lbl, opt4Box, opt4Lbl])
             clickSprite.isHidden = false
             menuBtn.color = UIColor(ciColor: .blue)

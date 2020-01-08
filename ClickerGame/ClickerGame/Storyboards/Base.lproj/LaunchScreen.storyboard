@@ -15,9 +15,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Clicker App" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vMm-Gi-43l">
-                                <rect key="frame" x="71.5" y="309.5" width="232" height="48"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Turtle Tapper" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vMm-Gi-43l">
+                                <rect key="frame" x="54.5" y="309.5" width="266.5" height="48"/>
                                 <fontDescription key="fontDescription" type="system" weight="black" pointSize="40"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="heartTurtle" translatesAutoresizingMaskIntoConstraints="NO" id="7p8-9z-TfQ">
+                                <rect key="frame" x="0.0" y="357.5" width="375" height="309.5"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sizcorp©" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zcU-lS-4we">
+                                <rect key="frame" x="0.0" y="262.5" width="375" height="37"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="31"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -25,7 +34,14 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="vMm-Gi-43l" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="2hB-M4-emL"/>
+                            <constraint firstItem="vMm-Gi-43l" firstAttribute="top" secondItem="zcU-lS-4we" secondAttribute="bottom" constant="10" id="SnZ-vZ-D0c"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="7p8-9z-TfQ" secondAttribute="trailing" id="eGu-JK-jSg"/>
+                            <constraint firstItem="7p8-9z-TfQ" firstAttribute="top" secondItem="vMm-Gi-43l" secondAttribute="bottom" id="gbm-XG-gJe"/>
+                            <constraint firstItem="7p8-9z-TfQ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="h9R-Ww-mmj"/>
+                            <constraint firstItem="zcU-lS-4we" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="oWY-un-3t1"/>
                             <constraint firstItem="vMm-Gi-43l" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="rxS-TM-c44"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="7p8-9z-TfQ" secondAttribute="bottom" id="veE-Os-7UI"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="zcU-lS-4we" secondAttribute="trailing" id="zuj-SG-Jfw"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -35,4 +51,7 @@
             <point key="canvasLocation" x="53" y="375"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="heartTurtle" width="1044" height="1044"/>
+    </resources>
 </document>
