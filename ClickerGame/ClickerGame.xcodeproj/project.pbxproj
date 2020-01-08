@@ -39,7 +39,7 @@
 
 /* Begin PBXFileReference section */
 		02B6FB0223C62A800015B521 /* turtleTapperBckg.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = turtleTapperBckg.mp3; sourceTree = "<group>"; };
-		02C8BB1E23ABD46B003A5A67 /* ClickerGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClickerGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		02C8BB1E23ABD46B003A5A67 /* Turtle Tapper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Turtle Tapper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02C8BB2123ABD46B003A5A67 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		02C8BB2323ABD46B003A5A67 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		02C8BB2523ABD46B003A5A67 /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
@@ -104,7 +104,7 @@
 		02C8BB1F23ABD46B003A5A67 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				02C8BB1E23ABD46B003A5A67 /* ClickerGame.app */,
+				02C8BB1E23ABD46B003A5A67 /* Turtle Tapper.app */,
 				02C8BB3823ABD46E003A5A67 /* ClickerGameTests.xctest */,
 				02C8BB4323ABD46E003A5A67 /* ClickerGameUITests.xctest */,
 			);
@@ -186,7 +186,7 @@
 			);
 			name = ClickerGame;
 			productName = ClickerGame;
-			productReference = 02C8BB1E23ABD46B003A5A67 /* ClickerGame.app */;
+			productReference = 02C8BB1E23ABD46B003A5A67 /* Turtle Tapper.app */;
 			productType = "com.apple.product-type.application";
 		};
 		02C8BB3723ABD46E003A5A67 /* ClickerGameTests */ = {
@@ -486,7 +486,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.TAPS.ClickerGame;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Turtle Tapper";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -504,7 +504,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.TAPS.ClickerGame;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Turtle Tapper";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
