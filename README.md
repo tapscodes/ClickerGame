@@ -4,7 +4,6 @@ A game idea that I came up with where a user gets points for clicking an object 
 - Actual Costume Shop and Costumes  
 - Proper Math for Shop
 - GameCenter support?
-- (Real) App Icon
 - Better game music loop?
 ## Current Bugs
 - Many Sprites Aren't Properly Sized
