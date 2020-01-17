@@ -10,4 +10,4 @@ A game idea that I came up with where a user gets points for clicking an object 
 - Many Sprites Aren't Properly Sized
 - Music loops a tiny bit off
 ## Official Release Date
-Whenever its finished and hopefully on the appstore.
+I gave up on this project for now, might return later.
